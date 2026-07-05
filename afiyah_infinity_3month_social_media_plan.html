@@ -1,0 +1,676 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1.5rem 1rem; max-width: 900px; margin: 0 auto; }
+
+  .brand-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .brand-dot { width: 10px; height: 10px; border-radius: 50%; background: #1B5E3B; }
+  .brand-title { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); letter-spacing: .06em; text-transform: uppercase; }
+  .brand-sub { font-size: 11px; color: var(--color-text-tertiary); margin-left: auto; }
+
+  .phase-tabs { display: flex; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; font-size: 13px; font-weight: 500; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); cursor: pointer; color: var(--color-text-secondary); background: transparent; transition: all .15s; }
+  .tab.active { background: #1B5E3B; color: #fff; border-color: #1B5E3B; }
+  .tab:hover:not(.active) { background: var(--color-background-secondary); }
+
+  .phase-panel { display: none; }
+  .phase-panel.active { display: block; }
+
+  .phase-header { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; border: 0.5px solid var(--color-border-tertiary); }
+  .phase-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: #C9A227; margin-bottom: 4px; }
+  .phase-name { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+  .phase-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+
+  .metrics-row { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; margin-bottom: 1rem; }
+  .metric { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .75rem; text-align: center; }
+  .metric-val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+  .metric-lbl { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  .week-grid { display: flex; flex-direction: column; gap: 10px; }
+  .week-block { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  .week-head { display: flex; align-items: center; gap: 10px; padding: .6rem 1rem; background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); cursor: pointer; user-select: none; }
+  .week-num { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; color: var(--color-text-tertiary); }
+  .week-theme { font-size: 14px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+  .week-toggle { font-size: 12px; color: var(--color-text-tertiary); transition: transform .2s; }
+  .week-toggle.open { transform: rotate(180deg); }
+  .week-body { display: none; padding: 1rem; }
+  .week-body.open { display: block; }
+
+  .post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+  .post-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: .75rem; }
+  .post-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .platform-badge { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: var(--border-radius-md); text-transform: uppercase; letter-spacing: .05em; }
+  .ig { background: #FEF3C7; color: #92400E; }
+  .li { background: #DBEAFE; color: #1E40AF; }
+  .tk { background: #FEE2E2; color: #991B1B; }
+  .yt { background: #FFE4E6; color: #9F1239; }
+  .format-tag { font-size: 10px; padding: 2px 7px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); margin-left: auto; }
+  .post-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; line-height: 1.4; }
+  .post-hook { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin-bottom: 6px; font-style: italic; }
+  .post-cta { font-size: 11px; color: #1B5E3B; font-weight: 500; }
+
+  .pillar-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-bottom: 1rem; }
+  .pillar { border-radius: var(--border-radius-md); padding: .75rem; border: 0.5px solid var(--color-border-tertiary); }
+  .pillar-icon { font-size: 18px; margin-bottom: 6px; }
+  .pillar-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 3px; }
+  .pillar-pct { font-size: 11px; color: var(--color-text-secondary); }
+  .pillar-bar-bg { height: 4px; background: var(--color-background-secondary); border-radius: 2px; margin-top: 6px; }
+  .pillar-bar { height: 4px; border-radius: 2px; background: #1B5E3B; }
+
+  .hashtag-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .5rem; }
+  .hashtag { font-size: 11px; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: 100px; padding: 3px 10px; color: var(--color-text-secondary); }
+
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: .5rem; }
+  .kpi-item { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .kpi-bold { font-weight: 500; color: var(--color-text-primary); }
+
+  .section-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: .6rem; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+
+  @media (max-width: 500px) {
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+  <div class="brand-bar">
+    <div class="brand-dot"></div>
+    <span class="brand-title">Afiyah Infinity — 3-Month Social Strategy</span>
+    <span class="brand-sub">Learn · Aware · Engage</span>
+  </div>
+
+  <div class="phase-tabs">
+    <button class="tab active" onclick="showPhase(0)">Month 1 — Educate</button>
+    <button class="tab" onclick="showPhase(1)">Month 2 — Inspire</button>
+    <button class="tab" onclick="showPhase(2)">Month 3 — Activate</button>
+    <button class="tab" onclick="showPhase(3)">Pillars & KPIs</button>
+  </div>
+
+  <!-- MONTH 1 -->
+  <div class="phase-panel active" id="phase-0">
+    <div class="phase-header">
+      <div class="phase-label">Month 1 · Jan / Feb</div>
+      <div class="phase-name">Educate & Build Trust</div>
+      <div class="phase-desc">Introduce Afiyah Infinity to the world. Plant seeds of financial literacy rooted in faith. The goal is brand awareness, credibility, and community formation — not selling.</div>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-val">3–4</div><div class="metric-lbl">posts / week</div></div>
+      <div class="metric"><div class="metric-val">4</div><div class="metric-lbl">platforms</div></div>
+      <div class="metric"><div class="metric-val">60%</div><div class="metric-lbl">educational</div></div>
+      <div class="metric"><div class="metric-val">5K</div><div class="metric-lbl">follower target</div></div>
+    </div>
+    <div class="week-grid">
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 1</span>
+          <span class="week-theme">Brand launch — "What is Afiyah Infinity?"</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Reel 30s</span></div>
+              <div class="post-title">Founder story — Why Afiyah Infinity was born</div>
+              <div class="post-hook">"I couldn't find a single halal savings platform built for Muslim women. So I built one."</div>
+              <div class="post-cta">CTA: Save this · Share with a sister</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 5 slides</span></div>
+              <div class="post-title">What does "Halal Wealth" actually mean?</div>
+              <div class="post-hook">Slide 1: The problem. Slide 2–4: Riba vs Mudarabah explained simply. Slide 5: The Afiyah promise.</div>
+              <div class="post-cta">CTA: Drop a 🌙 if this resonated</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Article</span></div>
+              <div class="post-title">The $3 trillion opportunity no one is building for Muslim women</div>
+              <div class="post-hook">Professional tone. Cite Islamic finance market data. Position Maisha as a thought leader.</div>
+              <div class="post-cta">CTA: Follow for weekly Islamic fintech insights</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Video 5–8 min</span></div>
+              <div class="post-title">Afiyah Infinity — Official brand launch video</div>
+              <div class="post-hook">Cinematic intro. Show the problem visually. Introduce the ecosystem: Save, Invest, Give, Learn.</div>
+              <div class="post-cta">CTA: Subscribe · Join the waitlist</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 2</span>
+          <span class="week-theme">Islamic Finance 101 — Educating without jargon</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 6 slides</span></div>
+              <div class="post-title">What is Riba and why does it matter to you?</div>
+              <div class="post-hook">Green & gold brand palette. Clean infographic style. Use plain language — no fiqh degree required.</div>
+              <div class="post-cta">CTA: Share this with someone who needs it</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Reel 60s</span></div>
+              <div class="post-title">"I didn't know saving could be haram" — myth vs fact</div>
+              <div class="post-hook">Trending audio. Fast cuts. Text on screen. Conversational, relatable Muslim woman speaking directly to camera.</div>
+              <div class="post-cta">CTA: Follow for more Islamic finance tips</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Static Quote Card</span></div>
+              <div class="post-title">Hadith on wealth & responsibility</div>
+              <div class="post-hook">Gold foil style. Arabic calligraphy + English translation. Brand colours. Sharable content.</div>
+              <div class="post-cta">CTA: Save for your morning reflection</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Post + Infographic</span></div>
+              <div class="post-title">5 Islamic finance structures every Muslim professional should know</div>
+              <div class="post-hook">Mudarabah · Musharakah · Wakalah · Wadiah · Waqf. Crisp visual. Professional yet accessible.</div>
+              <div class="post-cta">CTA: Repost if you learned something new</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 3</span>
+          <span class="week-theme">The Muslim Woman & Money — addressing the real gap</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 7 slides</span></div>
+              <div class="post-title">Why Muslim women are underserved by finance — and what we're doing about it</div>
+              <div class="post-hook">Data-led. 7–10% access gap. Relatable illustrations. Ends with Afiyah as the solution.</div>
+              <div class="post-cta">CTA: Tag a Muslim woman who deserves better</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Reel 45s</span></div>
+              <div class="post-title">"Financial freedom IS possible without riba" — storytime</div>
+              <div class="post-hook">Personal story format. Hook in first 3 seconds. Relatable struggle → hopeful solution.</div>
+              <div class="post-cta">CTA: Comment your biggest money barrier</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Reel 30s</span></div>
+              <div class="post-title">Day in the life of a Muslim woman managing her halal finances</div>
+              <div class="post-hook">Aesthetic lifestyle reel. Morning routine. App usage. Modest fashion. Aspirational but real.</div>
+              <div class="post-cta">CTA: Share if this is your goal too</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Video 10 min</span></div>
+              <div class="post-title">How to start saving halally in Bangladesh (and globally)</div>
+              <div class="post-hook">Practical, step-by-step. Feature Afiyah savings tools. Local currency context. Subtitles in Bengali + English.</div>
+              <div class="post-cta">CTA: Like · Subscribe · Join waitlist</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 4</span>
+          <span class="week-theme">Zakat & Social Finance — giving as a financial tool</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 5 slides</span></div>
+              <div class="post-title">Zakat is not charity. It's a financial system.</div>
+              <div class="post-hook">Reframe Zakat as a wealth circulation mechanism. Traceable impact. Community empowerment angle.</div>
+              <div class="post-cta">CTA: Save this · Use our Zakat calculator</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Reel 60s</span></div>
+              <div class="post-title">I calculated my Zakat for the first time — here's what happened</div>
+              <div class="post-hook">Emotional, honest. Show the calculator in action. Real impact of giving. End with empowerment.</div>
+              <div class="post-cta">CTA: Calculate yours — link in bio</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Static Infographic</span></div>
+              <div class="post-title">Nisab explained — are you eligible to give Zakat?</div>
+              <div class="post-hook">Simple visual. Gold & green palette. Shareable. Educational. Link to calculator.</div>
+              <div class="post-cta">CTA: Link in bio to calculate</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Thought Leadership Post</span></div>
+              <div class="post-title">Can Zakat solve the Muslim world's wealth inequality? Here's the data.</div>
+              <div class="post-hook">Bold opinion piece. Cite global Zakat potential ($1T+). Position Afiyah as the infrastructure layer.</div>
+              <div class="post-cta">CTA: What do you think? Comment below.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MONTH 2 -->
+  <div class="phase-panel" id="phase-1">
+    <div class="phase-header">
+      <div class="phase-label">Month 2 · Feb / Mar</div>
+      <div class="phase-name">Inspire & Build Community</div>
+      <div class="phase-desc">Show the human side. Feature real women, real stories, and lived faith. Deepen emotional connection through storytelling, community voices, and spiritual content that speaks to purpose-driven wealth.</div>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-val">4–5</div><div class="metric-lbl">posts / week</div></div>
+      <div class="metric"><div class="metric-val">UGC</div><div class="metric-lbl">community voices</div></div>
+      <div class="metric"><div class="metric-val">40%</div><div class="metric-lbl">storytelling</div></div>
+      <div class="metric"><div class="metric-val">15K</div><div class="metric-lbl">follower target</div></div>
+    </div>
+    <div class="week-grid">
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 5</span>
+          <span class="week-theme">Women of Impact — real stories of Muslim women & money</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel Series</span></div>
+              <div class="post-title">"Meet Fatima" — a Muslim entrepreneur who built halal wealth</div>
+              <div class="post-hook">Real woman (or archetype if early stage). Her challenge. Her turning point. Her financial journey. Afiyah's role.</div>
+              <div class="post-cta">CTA: Share your story in the comments</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Mini-doc 8 min</span></div>
+              <div class="post-title">Muslim women redefining wealth in Bangladesh</div>
+              <div class="post-hook">Film 3 women. Artisan, teacher, entrepreneur. Woven narrative. Cinematic. Subtitles in EN + BN.</div>
+              <div class="post-cta">CTA: Subscribe · Share her story</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Reel 60s</span></div>
+              <div class="post-title">Muslim women are the most underinvested group in finance — change that</div>
+              <div class="post-hook">Punchy stat-led hook. Rapid cuts. Personal stories overlay. End with call-to-community.</div>
+              <div class="post-cta">CTA: Tag a Muslim woman building wealth</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Quote Story Series</span></div>
+              <div class="post-title">"Her words" — weekly quotes from Muslim women in finance</div>
+              <div class="post-hook">10-slide story deck. Varied women. Diverse backgrounds. Multilingual. Gold calligraphy style cards.</div>
+              <div class="post-cta">CTA: Share to your story</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 6</span>
+          <span class="week-theme">Hajj & Umrah Series — sacred journeys, halal savings</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 6 slides</span></div>
+              <div class="post-title">How to save for Hajj without riba — the Afiyah way</div>
+              <div class="post-hook">Mudarabah savings plan. Start from $25/month. Show the maths. Countdown-to-Hajj visual.</div>
+              <div class="post-cta">CTA: Start your Hajj savings today</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Video 6 min</span></div>
+              <div class="post-title">Solo Hajj for Muslim women — everything you need to know</div>
+              <div class="post-hook">Practical guide. Mahram documentation. Women-only groups. Safety. Afiyah packages featured.</div>
+              <div class="post-cta">CTA: Download our free Hajj planning guide</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Reel 45s</span></div>
+              <div class="post-title">"I'm saving for Umrah with zero riba" — quick how-to</div>
+              <div class="post-hook">Screen-record style. Show the savings app flow. Relatable, casual tone. Beautiful Kaaba B-roll.</div>
+              <div class="post-cta">CTA: Link in bio to open your account</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Static Visual</span></div>
+              <div class="post-title">Afiyah Hajj packages — starting from $4,500</div>
+              <div class="post-hook">Premium brand visual. Show package tiers (Tawbah / Amanah). Mudarabah savings plan call-out.</div>
+              <div class="post-cta">CTA: DM us "HAJJ" for details</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 7</span>
+          <span class="week-theme">Ramadan Prep — faith, finance, and giving</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 8 slides</span></div>
+              <div class="post-title">Your Ramadan financial checklist — halal edition</div>
+              <div class="post-hook">Zakat · Sadaqah · Savings goal review · Spending audit · Waqf contribution. Spiritual + practical.</div>
+              <div class="post-cta">CTA: Save this for Ramadan planning</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Reel 30s</span></div>
+              <div class="post-title">30 days of halal financial intentions — Ramadan series</div>
+              <div class="post-hook">Daily affirmation-style reels. One per day. Islamic finance tip. Sunrise aesthetic. Gentle audio.</div>
+              <div class="post-cta">CTA: Follow for daily Ramadan finance tips</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Thought Leadership</span></div>
+              <div class="post-title">Why Ramadan is the best time to reset your financial intentions</div>
+              <div class="post-hook">Blend Islamic finance principles with personal finance best practices. Professional but spiritual.</div>
+              <div class="post-cta">CTA: Share with your network</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Video 12 min</span></div>
+              <div class="post-title">Ramadan & money — a Muslim woman's guide to intentional spending</div>
+              <div class="post-hook">Deep-dive. Budgeting. Zakat. Gift giving. Sadaqah automation. Afiyah tools featured throughout.</div>
+              <div class="post-cta">CTA: Subscribe · Use our Zakat calculator</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 8</span>
+          <span class="week-theme">Community-led content — UGC & challenges</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Challenge Campaign</span></div>
+              <div class="post-title">#HalalWealthChallenge — 30-day savings sprint</div>
+              <div class="post-hook">Save a small amount every day. Post your progress. Win an Umrah package. Community accountability.</div>
+              <div class="post-cta">CTA: Join the challenge — link in bio</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Duet / Stitch</span></div>
+              <div class="post-title">"Share your halal money win" — community stitch series</div>
+              <div class="post-hook">Ask followers to stitch with their own story. Feature the best entries. Build tribe feeling.</div>
+              <div class="post-cta">CTA: Stitch this with your win</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Poll Story Series</span></div>
+              <div class="post-title">Weekly polls — "Do you know if your savings account charges Riba?"</div>
+              <div class="post-hook">Interactive stories. High engagement. Use results to inform future educational content.</div>
+              <div class="post-cta">CTA: Vote · Swipe up for the answer</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Newsletter / Post</span></div>
+              <div class="post-title">Afiyah community update — our first 1,000 women</div>
+              <div class="post-hook">Milestone post. Gratitude. Impact numbers. What's coming next. Build investor and partner interest.</div>
+              <div class="post-cta">CTA: Join us on this journey</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MONTH 3 -->
+  <div class="phase-panel" id="phase-2">
+    <div class="phase-header">
+      <div class="phase-label">Month 3 · Mar / Apr</div>
+      <div class="phase-name">Activate & Convert</div>
+      <div class="phase-desc">Drive action. Turn followers into users. Feature product demonstrations, testimonials, and deeper ecosystem storytelling. Introduce the full Afiyah experience — from savings to Hajj to impact investing.</div>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><div class="metric-val">5</div><div class="metric-lbl">posts / week</div></div>
+      <div class="metric"><div class="metric-val">30%</div><div class="metric-lbl">product-led</div></div>
+      <div class="metric"><div class="metric-val">25%</div><div class="metric-lbl">conversion focus</div></div>
+      <div class="metric"><div class="metric-val">30K</div><div class="metric-lbl">follower target</div></div>
+    </div>
+    <div class="week-grid">
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 9</span>
+          <span class="week-theme">Product spotlight — saving, investing, giving in one app</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Reel 45s</span></div>
+              <div class="post-title">App walkthrough — open your halal savings account in 3 minutes</div>
+              <div class="post-hook">Screen-record. Clean transitions. Show onboarding, savings goal setup, Zakat allocation. No riba shown.</div>
+              <div class="post-cta">CTA: Link in bio · Join waitlist</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel 6 slides</span></div>
+              <div class="post-title">Afiyah ecosystem explained — Save. Invest. Give. Learn.</div>
+              <div class="post-hook">One slide per pillar. Brand visual. Diagram-style. Clear value proposition. Non-salesy tone.</div>
+              <div class="post-cta">CTA: Which feature excites you most? Comment below</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Demo Video 8 min</span></div>
+              <div class="post-title">Full Afiyah Infinity platform demo — inside the app</div>
+              <div class="post-hook">Detailed walkthrough. Savings engine. Zakat calculator. Investment pools. Learning modules.</div>
+              <div class="post-cta">CTA: Sign up for early access</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Product Post</span></div>
+              <div class="post-title">We built a Shariah-compliant fintech for Muslim women. Here's how it works.</div>
+              <div class="post-hook">Technical but accessible. Target Islamic finance professionals, investors, partners. Include architecture diagram.</div>
+              <div class="post-cta">CTA: Book a demo · Partner with us</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 10</span>
+          <span class="week-theme">Scholar series — faith meets finance, live Q&A</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Live Event</span></div>
+              <div class="post-title">Live Q&A — "Is my bank account halal?" with a Mufti</div>
+              <div class="post-hook">45-min Instagram Live. Female-friendly format. Submit questions in advance. Promote 2 weeks prior.</div>
+              <div class="post-cta">CTA: Set reminder · Submit your question</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Interview 20 min</span></div>
+              <div class="post-title">Islamic finance explained — interview with a Shariah scholar</div>
+              <div class="post-hook">Credibility-building. Covers Mudarabah, Musharakah, Waqf. Afiyah's governance framework featured.</div>
+              <div class="post-cta">CTA: Subscribe · Share with your community</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel</span></div>
+              <div class="post-title">5 fatwas every Muslim investor should know</div>
+              <div class="post-hook">Scholarly but accessible. Cite authentic sources. Afiyah Shariah Board credibility woven in naturally.</div>
+              <div class="post-cta">CTA: Save this</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge tk">TikTok</span><span class="format-tag">Reel 60s</span></div>
+              <div class="post-title">"I asked a Mufti about my savings account" — honest reaction</div>
+              <div class="post-hook">Casual, honest tone. Real conversation. What he said might surprise you. Educational hook.</div>
+              <div class="post-cta">CTA: Comment your question</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 11</span>
+          <span class="week-theme">Testimonials & social proof — real impact, real women</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Reel Series</span></div>
+              <div class="post-title">"Since joining Afiyah..." — early user spotlight series</div>
+              <div class="post-hook">3 short reels. 3 women. Different backgrounds. Authentic testimonials. Filmed vertically on phone = real.</div>
+              <div class="post-cta">CTA: Join them — link in bio</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel</span></div>
+              <div class="post-title">Impact report — what 1,000 women have saved and given</div>
+              <div class="post-hook">Data visualisation. Zakat distributed. Savings reached. SMEs funded. SDG alignment shown.</div>
+              <div class="post-cta">CTA: Be part of the next 1,000</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Case Study</span></div>
+              <div class="post-title">How Afiyah helped a Muslim entrepreneur access halal financing</div>
+              <div class="post-hook">B2B angle. Mudarabah financing story. Target Islamic banks, impact investors, CSR officers.</div>
+              <div class="post-cta">CTA: Partner with us</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Mini-doc 6 min</span></div>
+              <div class="post-title">Halal Wealth in 90 days — one woman's Afiyah journey</div>
+              <div class="post-hook">Follow one user over 3 months. Show savings growth, Zakat given, confidence gained. Emotional arc.</div>
+              <div class="post-cta">CTA: Start your own journey today</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week-block">
+        <div class="week-head" onclick="toggle(this)">
+          <span class="week-num">Week 12</span>
+          <span class="week-theme">3-month close — future vision & investor momentum</span>
+          <span class="week-toggle">▼</span>
+        </div>
+        <div class="week-body">
+          <div class="post-grid">
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Reel 60s</span></div>
+              <div class="post-title">We started Afiyah 90 days ago. Here's what happened.</div>
+              <div class="post-hook">Founder-led recap. Honest. Emotional. Metrics + milestones. Vision for Year 1 and beyond.</div>
+              <div class="post-cta">CTA: Join us for what comes next</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge ig">Instagram</span><span class="format-tag">Carousel</span></div>
+              <div class="post-title">What's coming next at Afiyah Infinity — product roadmap sneak peek</div>
+              <div class="post-hook">Investment pools. SME marketplace. GCC launch. AI financial planning. Build anticipation.</div>
+              <div class="post-cta">CTA: Join waitlist to get early access</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge li">LinkedIn</span><span class="format-tag">Funding Announcement</span></div>
+              <div class="post-title">Afiyah Infinity is raising — here's why now, and what for</div>
+              <div class="post-hook">Transparent, confident. Seed round ask. Market opportunity framing. Target: investors, banks, partners.</div>
+              <div class="post-cta">CTA: Book a call · Download our deck</div>
+            </div>
+            <div class="post-card">
+              <div class="post-top"><span class="platform-badge yt">YouTube</span><span class="format-tag">Vision Video 5 min</span></div>
+              <div class="post-title">The future of halal wealth for Muslim women — Afiyah's 5-year vision</div>
+              <div class="post-hook">Cinematic. $500M AUM vision. 500,000 women. Bangladesh to GCC. Faith-driven economic empowerment.</div>
+              <div class="post-cta">CTA: Subscribe · Be part of the movement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PILLARS & KPIs -->
+  <div class="phase-panel" id="phase-3">
+    <div class="section-title">Content pillars — what every post serves</div>
+    <div class="pillar-row">
+      <div class="pillar">
+        <div class="pillar-name">Educate (Ilm)</div>
+        <div class="pillar-pct">30% of content</div>
+        <div class="pillar-bar-bg"><div class="pillar-bar" style="width:30%"></div></div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Islamic finance 101, explainers, infographics, Zakat guides</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Inspire (Barakah)</div>
+        <div class="pillar-pct">25% of content</div>
+        <div class="pillar-bar-bg"><div class="pillar-bar" style="width:25%;background:#C9A227"></div></div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Stories, Hadith, real women, spiritual finance connection</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Community (Takaful)</div>
+        <div class="pillar-pct">20% of content</div>
+        <div class="pillar-bar-bg"><div class="pillar-bar" style="width:20%;background:#0F6E56"></div></div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Challenges, polls, UGC, Q&A, community spotlights</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Product (Amanah)</div>
+        <div class="pillar-pct">15% of content</div>
+        <div class="pillar-bar-bg"><div class="pillar-bar" style="width:15%;background:#185FA5"></div></div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Demos, walkthroughs, feature launches, partnerships</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Advocacy (Adl)</div>
+        <div class="pillar-pct">10% of content</div>
+        <div class="pillar-bar-bg"><div class="pillar-bar" style="width:10%;background:#963556"></div></div>
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Thought leadership, LinkedIn, investor content, SDG alignment</div>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-title">Hashtag strategy</div>
+    <div class="hashtag-wrap">
+      <span class="hashtag">#AfiyahInfinity</span>
+      <span class="hashtag">#HalalWealth</span>
+      <span class="hashtag">#IslamicFinance</span>
+      <span class="hashtag">#MuslimWomen</span>
+      <span class="hashtag">#HalalSavings</span>
+      <span class="hashtag">#Mudarabah</span>
+      <span class="hashtag">#ZakatCalculator</span>
+      <span class="hashtag">#HalalInvesting</span>
+      <span class="hashtag">#MuslimEntrepreneur</span>
+      <span class="hashtag">#WomenInFinance</span>
+      <span class="hashtag">#HalalWealthChallenge</span>
+      <span class="hashtag">#EternalBarakah</span>
+      <span class="hashtag">#IslamicFintech</span>
+      <span class="hashtag">#RibaFree</span>
+      <span class="hashtag">#HajjSavings</span>
+      <span class="hashtag">#UmrahPackages</span>
+      <span class="hashtag">#ShariaCompliant</span>
+      <span class="hashtag">#MuslimMoney</span>
+      <span class="hashtag">#Waqf</span>
+      <span class="hashtag">#Sadaqah</span>
+    </div>
+
+    <hr class="divider">
+    <div class="section-title">KPIs — 3-month targets</div>
+    <div class="kpi-grid">
+      <div class="kpi-item"><span class="kpi-bold">Instagram followers</span><br>0 → 30,000</div>
+      <div class="kpi-item"><span class="kpi-bold">TikTok followers</span><br>0 → 15,000</div>
+      <div class="kpi-item"><span class="kpi-bold">YouTube subscribers</span><br>0 → 5,000</div>
+      <div class="kpi-item"><span class="kpi-bold">LinkedIn connections</span><br>0 → 3,000</div>
+      <div class="kpi-item"><span class="kpi-bold">Carousel avg saves</span><br>Target: 8%+ save rate</div>
+      <div class="kpi-item"><span class="kpi-bold">Reel avg reach</span><br>Target: 5× follower count</div>
+      <div class="kpi-item"><span class="kpi-bold">Waitlist sign-ups</span><br>Target: 2,000 by month 3</div>
+      <div class="kpi-item"><span class="kpi-bold">Email list growth</span><br>Target: 1,500 subscribers</div>
+      <div class="kpi-item"><span class="kpi-bold">UGC posts tagged</span><br>Target: 500+ #AfiyahInfinity</div>
+      <div class="kpi-item"><span class="kpi-bold">Engagement rate</span><br>Target: 5%+ on IG</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-title">Production notes — content quality standards</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+      <div><span style="font-weight:500;color:var(--color-text-primary)">Photography</span><br>Use high-quality stock of modest Muslim women (Nappy.co, Unsplash, custom shoots). Natural light. Green + gold brand palette. No overly posed shots.</div>
+      <div><span style="font-weight:500;color:var(--color-text-primary)">Video style</span><br>Reels: vertical 9:16. 3-second hook rule. Captions always on. Trending audio layered under original VO. YouTube: widescreen 16:9.</div>
+      <div><span style="font-weight:500;color:var(--color-text-primary)">Carousel design</span><br>Consistent brand template. Slide 1 = bold hook. Slide 2–N = content. Last slide = clear CTA. Max 8 slides. Canva or Figma.</div>
+      <div><span style="font-weight:500;color:var(--color-text-primary)">Language</span><br>English primary. Bengali subtitles on key videos. Arabic phrases used authentically (not performatively). Accessible Islamic vocabulary.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showPhase(i) {
+  document.querySelectorAll('.phase-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
+}
+function toggle(head) {
+  const body = head.nextElementSibling;
+  const arrow = head.querySelector('.week-toggle');
+  const open = body.classList.toggle('open');
+  arrow.classList.toggle('open', open);
+}
+</script>

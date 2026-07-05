@@ -1,30 +1,28 @@
-# Validation report
+# Validation Report
 
-**Package:** Afiyah Mobile App v1.0.0  
-**Date:** 5 July 2026  
-**Status:** PASSED
+**Release:** 2026-07-05  
+**Package type:** repository overlay
 
-## Checks performed
+## Passed
 
-- Required project structure present
-- JSON design tokens parse successfully
-- Dart source delimiter-balance scan
-- High-signal privileged-secret scan
-- Executable scripts marked and shell syntax checked during packaging
-- ZIP integrity test
+- Required overlay paths present.
+- High-signal secret scan passed; no private-key blocks, JWT-like service keys, provider keys, Resend keys, GitHub tokens or AWS access keys detected.
+- All `.ts` and `.tsx` files passed TypeScript syntax transpilation.
+- All JSON files parsed successfully.
+- Shell and Python validation scripts passed syntax checks.
+- PostgreSQL parser accepted migrations 006–012.
+- ZIP integrity test passed after packaging.
 
-## Environment limitation
+## Requires the real staging environment
 
-Flutter and Dart SDK binaries were not available in the packaging environment. Therefore `flutter pub get`, `dart format`, `flutter analyze`, widget tests and integration tests must run in CI or a Flutter 3.44 development environment before merge.
+These checks cannot be completed from the archive alone:
 
-## Static findings
+- database migration execution against the actual base schema;
+- RLS and security tests against staging Supabase;
+- Edge Function invocation with configured secrets;
+- Next.js lint, typecheck and production build in the full repository;
+- browser end-to-end flows;
+- backup restoration drill;
+- Hostinger/Vercel deployment and domain smoke tests.
 
-- No blocking static findings.
-
-## Production blockers
-
-- Generate and review Android/iOS platform shells.
-- Confirm backend endpoint contracts and session issuance.
-- Run the complete automated and staging security test plan.
-- Add signing, attestation, deep links, push configuration and store declarations.
-- Obtain final legal, privacy, Shariah and financial-compliance approvals.
+Passing syntax validation does not constitute production approval.

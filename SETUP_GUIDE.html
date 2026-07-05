@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Afiyah Infinity — Build Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lato:wght@300;400;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{ --green:#003629; --gold:#AD8633; --gold-l:#c9a052; --ivory:#F8F3E9; --char:#181715; --muted:rgba(255,255,255,.6); --line:rgba(173,134,51,.2); --code:#0d1f18; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--char);color:var(--ivory);font-family:'Lato',sans-serif;font-size:14px;line-height:1.7}
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+/* SIDEBAR */
+.sidebar{background:rgba(0,54,41,.9);border-right:1px solid var(--line);padding:32px 0;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sb-brand{padding:0 24px 24px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.sb-brand h2{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);font-weight:700}
+.sb-brand p{font-size:10px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;margin-top:3px}
+.sb-section{padding:8px 24px 4px;font-size:9px;letter-spacing:.3em;color:var(--gold-l);text-transform:uppercase;margin-top:8px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 24px;font-size:12px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;text-decoration:none;border-left:2px solid transparent}
+.sb-link:hover,.sb-link.active{color:var(--ivory);background:rgba(173,134,51,.08);border-left-color:var(--gold)}
+.sb-link .num{width:20px;height:20px;border-radius:50%;background:rgba(173,134,51,.15);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--gold);flex-shrink:0}
+.sb-done .num{background:rgba(94,203,161,.15);border-color:rgba(94,203,161,.3);color:#6dd9ae}
+/* MAIN */
+.main{padding:56px 72px;max-width:900px}
+/* SECTIONS */
+.section{margin-bottom:64px;padding-bottom:64px;border-bottom:1px solid rgba(255,255,255,.06)}
+.section:last-child{border-bottom:none}
+.sec-tag{font-size:9px;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+.sec-tag::before{content:'';display:block;width:28px;height:1px;background:var(--gold)}
+h1{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,42px);font-weight:900;line-height:1.1;margin-bottom:10px}
+h1 em{color:var(--gold);font-style:italic}
+h2{font-family:'Playfair Display',serif;font-size:26px;color:var(--ivory);margin-bottom:8px;font-weight:700}
+h2 em{color:var(--gold);font-style:italic}
+h3{font-size:13px;font-weight:700;color:var(--ivory);letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px;margin-top:24px}
+p{color:var(--muted);margin-bottom:14px;line-height:1.8}
+strong{color:var(--ivory);font-weight:700}
+/* CODE BLOCKS */
+.code-wrap{position:relative;margin-bottom:20px}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:rgba(0,0,0,.4);border:1px solid var(--line);border-bottom:none;border-radius:6px 6px 0 0}
+.code-lang{font-size:9px;letter-spacing:.2em;color:var(--gold-l);text-transform:uppercase;font-family:'Lato'}
+.copy-btn{font-size:9px;letter-spacing:.15em;color:var(--muted);cursor:pointer;padding:3px 10px;border:1px solid var(--line);border-radius:3px;background:transparent;transition:all .2s;font-family:'Lato';text-transform:uppercase}
+.copy-btn:hover{color:var(--gold);border-color:var(--gold)}
+.copy-btn.copied{color:#6dd9ae;border-color:rgba(94,203,161,.3)}
+pre{background:var(--code);border:1px solid var(--line);border-radius:0 0 6px 6px;padding:20px 18px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.85)}
+code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(173,134,51,.1);padding:2px 6px;border-radius:3px;color:var(--gold-l)}
+/* INLINE CMD */
+.cmd{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;background:var(--code);border:1px solid var(--line);border-radius:6px;margin-bottom:10px}
+.cmd code{background:none;padding:0;font-size:13px;color:#6dd9ae}
+.cmd-copy{font-size:9px;color:var(--muted);cursor:pointer;flex-shrink:0;padding:3px 8px;border:1px solid var(--line);border-radius:3px;transition:all .2s;font-family:'Lato';text-transform:uppercase;letter-spacing:.1em}
+.cmd-copy:hover{color:var(--gold)}
+/* STEPS */
+.step-list{display:flex;flex-direction:column;gap:3px;margin-bottom:20px}
+.step-item{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;border:1px solid var(--line);border-left:2px solid var(--gold);background:rgba(173,134,51,.04)}
+.step-n{font-size:11px;color:var(--gold);font-weight:700;flex-shrink:0;font-family:'Lato';margin-top:1px}
+.step-text{font-size:13px;color:rgba(255,255,255,.8);line-height:1.5}
+.step-text p{color:rgba(255,255,255,.55);font-size:11.5px;margin:3px 0 0;font-weight:300}
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.card{padding:18px 20px;border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:4px}
+.card h4{font-size:12px;font-weight:700;color:var(--ivory);margin-bottom:5px}
+.card p{font-size:11.5px;color:var(--muted);margin:0;line-height:1.5;font-weight:300}
+.card .badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:20px;margin-top:8px;font-weight:700}
+.green-badge{background:rgba(94,203,161,.1);color:#6dd9ae;border:1px solid rgba(94,203,161,.2)}
+.gold-badge{background:rgba(173,134,51,.12);color:var(--gold-l);border:1px solid rgba(173,134,51,.25)}
+/* ALERT */
+.alert{padding:14px 18px;margin-bottom:20px;border-radius:4px;display:flex;gap:12px;font-size:12.5px;line-height:1.5}
+.alert-warn{background:rgba(224,180,80,.07);border:1px solid rgba(224,180,80,.2);color:rgba(255,220,100,.8)}
+.alert-info{background:rgba(94,203,161,.06);border:1px solid rgba(94,203,161,.18);color:rgba(140,220,180,.85)}
+/* FILE TREE */
+.tree{background:var(--code);border:1px solid var(--line);border-radius:6px;padding:18px 20px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;margin-bottom:20px}
+.tree .dir{color:var(--gold-l)}
+.tree .file{color:rgba(255,255,255,.7)}
+.tree .new{color:#6dd9ae}
+.tree .comment{color:rgba(255,255,255,.25);font-style:italic}
+/* PROGRESS BAR */
+.progress{background:rgba(255,255,255,.06);height:4px;border-radius:2px;margin-bottom:32px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .4s}
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:12.5px}
+th{text-align:left;padding:10px 14px;background:rgba(173,134,51,.1);color:var(--gold-l);font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--line)}
+td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.05);color:var(--muted);vertical-align:top}
+td:first-child{color:var(--ivory);font-weight:400;font-family:'JetBrains Mono',monospace;font-size:12px}
+tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-brand"><h2>Afiyah∞</h2><p>Build Setup Guide</p></div>
+  <div class="sb-section">Setup</div>
+  <a class="sb-link active" href="#overview"><div class="num">0</div> Overview</a>
+  <a class="sb-link" href="#prereqs"><div class="num">1</div> Prerequisites</a>
+  <a class="sb-link" href="#supabase"><div class="num">2</div> Supabase Project</a>
+  <a class="sb-link" href="#schema"><div class="num">3</div> Run the Schema</a>
+  <a class="sb-link" href="#nextjs"><div class="num">4</div> Next.js App</a>
+  <a class="sb-link" href="#env"><div class="num">5</div> Environment Vars</a>
+  <div class="sb-section">Auth</div>
+  <a class="sb-link" href="#auth-config"><div class="num">6</div> Configure Auth</a>
+  <a class="sb-link" href="#auth-files"><div class="num">7</div> Drop Auth Files</a>
+  <a class="sb-link" href="#oauth"><div class="num">8</div> OAuth Providers</a>
+  <div class="sb-section">Deploy</div>
+  <a class="sb-link" href="#test"><div class="num">9</div> Test Locally</a>
+  <a class="sb-link" href="#vercel"><div class="num">10</div> Deploy to Vercel</a>
+  <div class="sb-section">Next</div>
+  <a class="sb-link" href="#next-steps"><div class="num">→</div> Phase 2: Dashboards</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- OVERVIEW -->
+<div class="section" id="overview">
+  <div class="sec-tag">Afiyah Infinity · Build Guide</div>
+  <h1>Auth <em>wired</em> to<br>Supabase in<br>15 minutes.</h1>
+  <p>This guide takes you from zero to a fully working dual-portal Next.js app with Supabase auth, route protection, and the Afiyah login UI live on Vercel. No hand-waving. Every command is exact.</p>
+
+  <div class="progress"><div class="progress-fill" style="width:0%" id="progress-bar"></div></div>
+
+  <div class="cards">
+    <div class="card"><h4>What you'll have at the end</h4><p>Two portals (Sisters B2C + Partners B2B) with email + OAuth auth, route protection, and the full Supabase schema live in production.</p><span class="badge green-badge">~15 min</span></div>
+    <div class="card"><h4>Files you downloaded</h4><p><code>middleware.ts</code>, <code>lib/supabase/</code>, <code>app/(auth)/login/</code>, <code>types/database.ts</code>, <code>.env.local.example</code>, <code>schema.sql</code></p><span class="badge gold-badge">8 files</span></div>
+  </div>
+</div>
+
+<!-- PREREQS -->
+<div class="section" id="prereqs">
+  <div class="sec-tag">Step 1</div>
+  <h2>Prerequisites</h2>
+  <p>You need these installed before starting.</p>
+
+  <div class="step-list">
+    <div class="step-item"><span class="step-n">01</span><div class="step-text"><strong>Node.js 18.17+</strong><p>Check: <code>node --version</code> — install from nodejs.org if needed</p></div></div>
+    <div class="step-item"><span class="step-n">02</span><div class="step-text"><strong>A Supabase account</strong><p>Free at supabase.com — you need an email + organisation</p></div></div>
+    <div class="step-item"><span class="step-n">03</span><div class="step-text"><strong>A Vercel account</strong><p>Free at vercel.com — connect to GitHub for one-click deploys</p></div></div>
+    <div class="step-item"><span class="step-n">04</span><div class="step-text"><strong>Git repo ready</strong><p>Create a new repo at github.com — name it <code>afiyah-infinity</code></p></div></div>
+  </div>
+</div>
+
+<!-- SUPABASE -->
+<div class="section" id="supabase">
+  <div class="sec-tag">Step 2</div>
+  <h2>Create Supabase <em>Project</em></h2>
+
+  <div class="step-list">
+    <div class="step-item"><span class="step-n">01</span><div class="step-text"><strong>Go to supabase.com → New Project</strong><p>Name it <code>afiyah-infinity</code> · Choose a region close to Bangladesh or UAE · Set a strong database password (save it)</p></div></div>
+    <div class="step-item"><span class="step-n">02</span><div class="step-text"><strong>Copy your API keys</strong><p>Settings → API → copy <code>Project URL</code> and <code>anon public</code> key. You'll paste these into <code>.env.local</code> in Step 5.</p></div></div>
+    <div class="step-item"><span class="step-n">03</span><div class="step-text"><strong>Enable Email Auth</strong><p>Authentication → Providers → Email → Enable. Optionally disable "Confirm email" for faster local dev testing.</p></div></div>
+  </div>
+
+  <div class="alert alert-info">
+    <span>💡</span>
+    <span>The free Supabase tier gives you 500MB database, 1GB storage, 50K monthly active users, and 2GB bandwidth — plenty for MVP and early users.</span>
+  </div>
+</div>
+
+<!-- SCHEMA -->
+<div class="section" id="schema">
+  <div class="sec-tag">Step 3</div>
+  <h2>Run the <em>Schema</em></h2>
+  <p>Open Supabase → your project → <strong>SQL Editor → New query</strong>. Paste the entire contents of <code>afiyah_supabase_schema.sql</code> and click <strong>Run</strong>.</p>
+
+  <div class="alert alert-warn">
+    <span>⚠️</span>
+    <span><strong>Run order matters.</strong> The schema file is already ordered correctly — don't split it into separate queries. Run the whole file at once.</span>
+  </div>
+
+  <h3>What the schema creates</h3>
+  <table>
+    <tr><th>Object</th><th>Count</th><th>Purpose</th></tr>
+    <tr><td>Tables</td><td>20</td><td>profiles, b2c/b2b profiles, zakat, hajj, wallets, transactions, marketplace, governance</td></tr>
+    <tr><td>RLS Policies</td><td>16</td><td>Users can only access their own rows — mahram-aware privacy enforced at DB level</td></tr>
+    <tr><td>Triggers</td><td>7</td><td>Auto-create profile on signup, auto-compute 2% Zakat pool on every transaction</td></tr>
+    <tr><td>Views</td><td>3</td><td>v_b2c_dashboard, v_b2b_dashboard, v_zakat_pool_summary</td></tr>
+    <tr><td>Extensions</td><td>3</td><td>uuid-ossp, pgcrypto, pgvector (for Niyyah AI RAG)</td></tr>
+  </table>
+
+  <div class="alert alert-info">
+    <span>✅</span>
+    <span>After running, go to <strong>Table Editor</strong> — you should see all tables listed. The <code>circles</code> table will have 5 seed rows (Infinity Circle, Hajj Savers, etc.)</span>
+  </div>
+</div>
+
+<!-- NEXT.JS -->
+<div class="section" id="nextjs">
+  <div class="sec-tag">Step 4</div>
+  <h2>Bootstrap <em>Next.js</em></h2>
+
+  <h3>Create the app</h3>
+  <div class="cmd"><code>npx create-next-app@latest afiyah-infinity --typescript --tailwind --eslint --app --src-dir no --import-alias "@/*"</code><span class="cmd-copy" onclick="copyCmd(this)">Copy</span></div>
+  <div class="cmd"><code>cd afiyah-infinity</code><span class="cmd-copy" onclick="copyCmd(this)">Copy</span></div>
+
+  <h3>Install Supabase SSR packages</h3>
+  <div class="cmd"><code>npm install @supabase/ssr @supabase/supabase-js</code><span class="cmd-copy" onclick="copyCmd(this)">Copy</span></div>
+
+  <h3>Your final file structure</h3>
+  <div class="tree">
+<span class="dir">afiyah-infinity/</span>
+├── <span class="new">middleware.ts</span>              <span class="comment"># ← drop in (downloaded)</span>
+├── <span class="new">.env.local</span>               <span class="comment"># ← create from .env.local.example</span>
+├── package.json
+├── <span class="dir">lib/</span>
+│   └── <span class="dir">supabase/</span>
+│       ├── <span class="new">client.ts</span>           <span class="comment"># ← drop in (downloaded)</span>
+│       └── <span class="new">server.ts</span>           <span class="comment"># ← drop in (downloaded)</span>
+├── <span class="dir">types/</span>
+│   └── <span class="new">database.ts</span>           <span class="comment"># ← drop in (downloaded)</span>
+└── <span class="dir">app/</span>
+    ├── layout.tsx
+    ├── <span class="dir">(auth)/</span>
+    │   └── <span class="dir">login/</span>
+    │       ├── <span class="new">page.tsx</span>          <span class="comment"># ← drop in (downloaded)</span>
+    │       └── <span class="new">actions.ts</span>        <span class="comment"># ← drop in (downloaded)</span>
+    ├── <span class="dir">auth/</span>
+    │   └── <span class="dir">callback/</span>
+    │       └── <span class="new">route.ts</span>          <span class="comment"># ← drop in (downloaded)</span>
+    ├── <span class="dir">(b2c)/</span>
+    │   └── <span class="dir">dashboard/</span>
+    │       └── page.tsx              <span class="comment"># Phase 2</span>
+    └── <span class="dir">(b2b)/</span>
+        └── <span class="dir">partner/</span>
+            └── page.tsx              <span class="comment"># Phase 2</span>
+  </div>
+</div>
+
+<!-- ENV -->
+<div class="section" id="env">
+  <div class="sec-tag">Step 5</div>
+  <h2>Set Up <em>Environment Variables</em></h2>
+  <p>Copy <code>.env.local.example</code> to <code>.env.local</code> and fill in your values:</p>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre>cp .env.local.example .env.local</pre>
+  </div>
+
+  <p>Then edit <code>.env.local</code> — the only two values you <strong>need right now</strong> are:</p>
+
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">.env.local</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+    <pre>NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000</pre>
+  </div>
+
+  <div class="alert alert-warn">
+    <span>⚠️</span>
+    <span><strong>Never commit <code>.env.local</code> to git.</strong> Check that <code>.gitignore</code> includes <code>.env.local</code> (Next.js adds this automatically).</span>
+  </div>
+</div>
+
+<!-- AUTH CONFIG -->
+<div class="section" id="auth-config">
+  <div class="sec-tag">Step 6</div>
+  <h2>Configure <em>Supabase Auth</em></h2>
+
+  <h3>Set the Site URL and Redirect URLs</h3>
+  <p>In Supabase → Authentication → URL Configuration:</p>
+
+  <div class="step-list">
+    <div class="step-item"><span class="step-n">01</span><div class="step-text"><strong>Site URL</strong><p>Set to <code>http://localhost:3000</code> for now. Update to production URL after Vercel deploy.</p></div></div>
+    <div class="step-item"><span class="step-n">02</span><div class="step-text"><strong>Redirect URLs — add both:</strong><p><code>http://localhost:3000/auth/callback</code><br><code>https://YOUR_VERCEL_URL.vercel.app/auth/callback</code></p></div></div>
+  </div>
+
+  <h3>Configure Email Templates (optional but recommended)</h3>
+  <p>Authentication → Email Templates → update the confirmation email to match Afiyah's brand tone. Replace the default Supabase copy with Afiyah messaging.</p>
+</div>
+
+<!-- AUTH FILES -->
+<div class="section" id="auth-files">
+  <div class="sec-tag">Step 7</div>
+  <h2>Drop In the <em>Auth Files</em></h2>
+  <p>Copy each downloaded file to its exact path in the Next.js project:</p>
+
+  <table>
+    <tr><th>Downloaded File</th><th>Drop Into</th></tr>
+    <tr><td>middleware.ts</td><td><code>afiyah-infinity/middleware.ts</code></td></tr>
+    <tr><td>lib/supabase/client.ts</td><td><code>afiyah-infinity/lib/supabase/client.ts</code></td></tr>
+    <tr><td>lib/supabase/server.ts</td><td><code>afiyah-infinity/lib/supabase/server.ts</code></td></tr>
+    <tr><td>types/database.ts</td><td><code>afiyah-infinity/types/database.ts</code></td></tr>
+    <tr><td>app/(auth)/login/page.tsx</td><td><code>afiyah-infinity/app/(auth)/login/page.tsx</code></td></tr>
+    <tr><td>app/(auth)/login/actions.ts</td><td><code>afiyah-infinity/app/(auth)/login/actions.ts</code></td></tr>
+    <tr><td>app/auth/callback/route.ts</td><td><code>afiyah-infinity/app/auth/callback/route.ts</code></td></tr>
+  </table>
+
+  <p>Create any missing directories first:</p>
+  <div class="cmd"><code>mkdir -p lib/supabase types app/\(auth\)/login app/auth/callback</code><span class="cmd-copy" onclick="copyCmd(this)">Copy</span></div>
+</div>
+
+<!-- OAUTH -->
+<div class="section" id="oauth">
+  <div class="sec-tag">Step 8</div>
+  <h2>Enable <em>OAuth Providers</em></h2>
+  <p>In Supabase → Authentication → Providers:</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>🔵 Google (B2C Sisters)</h4>
+      <p>Enable Google provider → create a project at console.cloud.google.com → OAuth 2.0 credentials → paste Client ID + Secret into Supabase.</p>
+      <span class="badge green-badge">Required for B2C</span>
+    </div>
+    <div class="card">
+      <h4>🍎 Apple (B2C Sisters)</h4>
+      <p>Enable Apple provider → requires Apple Developer account ($99/yr) → create App ID + Service ID → configure Sign in with Apple.</p>
+      <span class="badge gold-badge">Optional for MVP</span>
+    </div>
+    <div class="card">
+      <h4>💼 LinkedIn (B2B Partners)</h4>
+      <p>Enable LinkedIn OIDC provider → create app at developer.linkedin.com → OAuth 2.0 settings → Sign In with LinkedIn using OpenID Connect.</p>
+      <span class="badge green-badge">Required for B2B</span>
+    </div>
+    <div class="card">
+      <h4>📧 Email (Both portals)</h4>
+      <p>Already enabled in Step 2. Works out of the box. For production: add a custom SMTP via Resend to avoid Supabase's 3 emails/hour limit.</p>
+      <span class="badge green-badge">Already enabled</span>
+    </div>
+  </div>
+</div>
+
+<!-- TEST -->
+<div class="section" id="test">
+  <div class="sec-tag">Step 9</div>
+  <h2>Test <em>Locally</em></h2>
+
+  <h3>Start the dev server</h3>
+  <div class="cmd"><code>npm run dev</code><span class="cmd-copy" onclick="copyCmd(this)">Copy</span></div>
+
+  <p>Open <strong>http://localhost:3000/login</strong> — you should see the Afiyah login page with the portal toggle.</p>
+
+  <h3>Test checklist</h3>
+  <div class="step-list">
+    <div class="step-item"><span class="step-n">✓</span><div class="step-text"><strong>Login page loads with Sisters Portal by default</strong><p>Toggle switches between Sisters and Partners portals</p></div></div>
+    <div class="step-item"><span class="step-n">✓</span><div class="step-text"><strong>Create a B2C account with email</strong><p>Check Supabase → Authentication → Users — you should see the new user appear</p></div></div>
+    <div class="step-item"><span class="step-n">✓</span><div class="step-text"><strong>Sign out and sign back in</strong><p>Confirm the session persists across page refreshes</p></div></div>
+    <div class="step-item"><span class="step-n">✓</span><div class="step-text"><strong>Visit /dashboard directly while logged out</strong><p>Middleware should redirect you to /login?portal=b2c</p></div></div>
+    <div class="step-item"><span class="step-n">✓</span><div class="step-text"><strong>Visit /partner directly while logged out</strong><p>Middleware should redirect you to /login?portal=b2b</p></div></div>
+    <div class="step-item"><span class="step-n">✓</span><div class="step-text"><strong>Submit a B2B application (Step 1 → 2 → 3)</strong><p>Check Supabase → Table Editor → b2b_profiles — row should appear with kyb_status = 'submitted'</p></div></div>
+  </div>
+</div>
+
+<!-- VERCEL -->
+<div class="section" id="vercel">
+  <div class="sec-tag">Step 10</div>
+  <h2>Deploy to <em>Vercel</em></h2>
+
+  <h3>Push to GitHub</h3>
+  <div class="cmd"><code>git add . && git commit -m "feat: auth system with dual portal login" && git push</code><span class="cmd-copy" onclick="copyCmd(this)">Copy</span></div>
+
+  <h3>Import on Vercel</h3>
+  <div class="step-list">
+    <div class="step-item"><span class="step-n">01</span><div class="step-text"><strong>vercel.com → New Project → Import Git Repository</strong><p>Select your <code>afiyah-infinity</code> repo → Framework Preset: Next.js (auto-detected)</p></div></div>
+    <div class="step-item"><span class="step-n">02</span><div class="step-text"><strong>Add Environment Variables</strong><p>In the Vercel deploy screen → Environment Variables → add all values from your <code>.env.local</code> file. Change <code>NEXT_PUBLIC_SITE_URL</code> to your Vercel URL.</p></div></div>
+    <div class="step-item"><span class="step-n">03</span><div class="step-text"><strong>Deploy</strong><p>Click Deploy → Vercel builds and deploys in ~60 seconds.</p></div></div>
+    <div class="step-item"><span class="step-n">04</span><div class="step-text"><strong>Update Supabase redirect URLs</strong><p>Authentication → URL Configuration → add your Vercel production URL to Redirect URLs: <code>https://YOUR_APP.vercel.app/auth/callback</code></p></div></div>
+  </div>
+
+  <div class="alert alert-info">
+    <span>🚀</span>
+    <span><strong>You're live.</strong> Both portals are deployed. Auth is working. The Supabase schema is running in production. Ready for Phase 2: building out the B2C Sisters dashboard.</span>
+  </div>
+</div>
+
+<!-- NEXT STEPS -->
+<div class="section" id="next-steps">
+  <div class="sec-tag">Phase 2 — What's next</div>
+  <h2>Build the <em>Dashboards</em></h2>
+  <p>Auth is done. Next Claude session: build out the B2C Sisters dashboard with Zakat calculator, Hajj savings tracker, wallet, and Niyyah AI advisor.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>B2C Sisters Dashboard</h4>
+      <p>Wallet balance, Zakat calculator wired to DB, Hajj savings goal tracker, AI advisor chat, tier upgrade flow with Stripe.</p>
+      <span class="badge green-badge">Phase 2A</span>
+    </div>
+    <div class="card">
+      <h4>B2B Partners Dashboard</h4>
+      <p>KYB status tracker, MOU document signing, impact metrics, investment product listings, Shariah compliance engine.</p>
+      <span class="badge gold-badge">Phase 2B</span>
+    </div>
+    <div class="card">
+      <h4>Niyyah AI Advisor</h4>
+      <p>Wire Claude API to the chat interface. RAG from <code>fiqh_documents</code> table. Store embeddings with pgvector.</p>
+      <span class="badge green-badge">Phase 3A</span>
+    </div>
+    <div class="card">
+      <h4>Stripe Subscriptions</h4>
+      <p>Webhook to update <code>b2c_profiles.tier</code> on payment. Single, Premium, Platinum checkout flows. 2% Zakat auto-split.</p>
+      <span class="badge gold-badge">Phase 3B</span>
+    </div>
+  </div>
+
+  <p style="text-align:center;font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:rgba(173,134,51,.6);margin-top:32px">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْم</p>
+</div>
+
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<script>
+function copyCode(btn){
+  const pre = btn.closest('.code-wrap').querySelector('pre')
+  navigator.clipboard.writeText(pre.textContent.trim())
+  btn.textContent='Copied!'; btn.classList.add('copied')
+  setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied')},2000)
+}
+function copyCmd(btn){
+  const code = btn.closest('.cmd').querySelector('code')
+  navigator.clipboard.writeText(code.textContent.trim())
+  btn.textContent='✓'; setTimeout(()=>btn.textContent='Copy',1500)
+}
+
+// Sidebar active tracking
+const sections = document.querySelectorAll('.section')
+const links = document.querySelectorAll('.sb-link')
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id = e.target.id
+      links.forEach(l=>{ l.classList.toggle('active', l.getAttribute('href')==='#'+id) })
+      // Update progress
+      const idx = [...sections].indexOf(e.target)
+      document.getElementById('progress-bar').style.width = ((idx+1)/sections.length*100)+'%'
+    }
+  })
+},{threshold:0.3})
+sections.forEach(s=>obs.observe(s))
+</script>
+</body>
+</html>

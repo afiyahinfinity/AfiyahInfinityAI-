@@ -1,0 +1,100 @@
+openapi: 3.1.0
+info:
+  title: Afiyah AI Services API
+  version: 1.0.0
+  description: Secure, non-advisory AI service contracts for Afiyah Infinity AI.
+servers:
+  - url: https://{project}.supabase.co/functions/v1
+    variables:
+      project:
+        default: YOUR_PROJECT
+security:
+  - bearerAuth: []
+paths:
+  /noor-guard:
+    post:
+      operationId: sendNoorMessage
+      summary: Send a bounded message to Noor
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/noor-request.json
+      responses:
+        '200':
+          description: Accepted Noor response
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/noor-response.json
+        '400': { description: Invalid request }
+        '401': { description: Authentication required }
+        '403': { description: Origin or policy rejected }
+        '409': { description: Idempotency or state conflict }
+        '429': { description: Quota exceeded }
+  /agent-execute:
+    post:
+      operationId: decideNoorAction
+      summary: Approve or decline a proposed Noor action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [action_id, decision]
+              properties:
+                action_id: { type: string, format: uuid }
+                decision: { type: string, enum: [approved, declined] }
+      responses:
+        '200': { description: Idempotent decision result }
+        '400': { description: Invalid request }
+        '401': { description: Authentication required }
+        '404': { description: Action not found for caller }
+        '409': { description: State conflict }
+  /coach-response:
+    post:
+      operationId: createCoachResponse
+      summary: Generate a bounded, non-diagnostic coaching response
+      responses:
+        '200': { description: Coach response }
+  /barakah-baseline:
+    post:
+      operationId: createBarakahNarrative
+      summary: Generate narrative around a deterministic baseline score
+      responses:
+        '200': { description: Baseline narrative }
+  /ai-identity-check:
+    post:
+      operationId: runIdentityPlausibility
+      summary: Assist prioritisation; never make a final identity decision
+      responses:
+        '200': { description: Plausibility result queued for human review }
+  /id-document-check:
+    post:
+      operationId: runDocumentPlausibility
+      summary: Limited transient vision plausibility check
+      responses:
+        '200': { description: Plausibility result queued for human review }
+  /health:
+    get:
+      operationId: getAIServiceHealth
+      security: []
+      summary: Configuration-safe service health
+      responses:
+        '200': { description: Health metadata }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

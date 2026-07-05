@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afiyah Infinity AI — Master Analysis & Build Blueprint</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A84A;
+    --gold-light: #E8C46A;
+    --gold-dim: rgba(212,168,74,0.15);
+    --navy: #0A0E1A;
+    --navy-mid: #111827;
+    --navy-card: #151D2E;
+    --navy-border: rgba(212,168,74,0.2);
+    --white: #F8F5EE;
+    --white-dim: rgba(248,245,238,0.7);
+    --white-muted: rgba(248,245,238,0.4);
+    --green: #4CAF7D;
+    --red: #E05C5C;
+    --amber: #F5A623;
+    --blue: #4A8FD4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── TOP BANNER ─── */
+  .top-banner {
+    background: linear-gradient(135deg, #0D1520 0%, #1A2540 50%, #0D1520 100%);
+    border-bottom: 1px solid var(--navy-border);
+    padding: 48px 40px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .top-banner::before {
+    content: '∞';
+    font-family: 'Playfair Display', serif;
+    font-size: 400px;
+    color: rgba(212,168,74,0.04);
+    position: absolute;
+    right: -60px;
+    top: -80px;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .banner-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .banner-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .banner-title span { color: var(--gold); }
+
+  .banner-sub {
+    color: var(--white-dim);
+    font-size: 14px;
+    max-width: 600px;
+  }
+
+  .banner-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    background: var(--gold-dim);
+    border: 1px solid var(--navy-border);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ─── NAV ─── */
+  .toc {
+    background: var(--navy-card);
+    border-bottom: 1px solid var(--navy-border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+
+  .toc-item {
+    padding: 16px 20px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .toc-item:hover, .toc-item.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ─── LAYOUT ─── */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .section {
+    padding: 60px 0 20px;
+    border-bottom: 1px solid rgba(212,168,74,0.08);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    background: var(--gold-dim);
+    border: 1px solid var(--navy-border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    white-space: nowrap;
+    margin-top: 6px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .section-title span { color: var(--gold); }
+
+  .section-desc {
+    color: var(--white-dim);
+    font-size: 14px;
+    margin-top: 8px;
+    max-width: 700px;
+  }
+
+  /* ─── CARDS ─── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px;
+    padding: 24px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(212,168,74,0.08);
+  }
+
+  .card-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .card-body { color: var(--white-dim); font-size: 13.5px; }
+
+  /* ─── STATUS PILLS ─── */
+  .status { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; font-weight: 600; }
+  .status-green { background: rgba(76,175,125,0.15); color: var(--green); border: 1px solid rgba(76,175,125,0.3); }
+  .status-amber { background: rgba(245,166,35,0.15); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
+  .status-red { background: rgba(224,92,92,0.15); color: var(--red); border: 1px solid rgba(224,92,92,0.3); }
+  .status-blue { background: rgba(74,143,212,0.15); color: var(--blue); border: 1px solid rgba(74,143,212,0.3); }
+  .status-gold { background: rgba(212,168,74,0.15); color: var(--gold); border: 1px solid rgba(212,168,74,0.3); }
+
+  /* ─── TABLES ─── */
+  .table-wrap { overflow-x: auto; margin: 24px 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  th {
+    background: rgba(212,168,74,0.1);
+    color: var(--gold);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--navy-border);
+  }
+
+  td {
+    padding: 12px 16px;
+    color: var(--white-dim);
+    border-bottom: 1px solid rgba(212,168,74,0.06);
+    vertical-align: top;
+  }
+
+  tr:hover td { background: rgba(212,168,74,0.03); }
+
+  /* ─── CALLOUTS ─── */
+  .callout {
+    border-left: 3px solid var(--gold);
+    background: rgba(212,168,74,0.06);
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--white-dim);
+  }
+
+  .callout.warn {
+    border-left-color: var(--amber);
+    background: rgba(245,166,35,0.06);
+  }
+
+  .callout.danger {
+    border-left-color: var(--red);
+    background: rgba(224,92,92,0.06);
+  }
+
+  .callout.good {
+    border-left-color: var(--green);
+    background: rgba(76,175,125,0.06);
+  }
+
+  .callout strong { color: var(--white); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 32px 0;
+  }
+
+  /* ─── PHASE TIMELINE ─── */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 24px 0;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  .timeline-item {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 32px;
+    position: relative;
+  }
+
+  .timeline-dot {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+    background: var(--navy-card);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    color: var(--gold);
+    font-size: 18px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-content {
+    flex: 1;
+    padding-top: 8px;
+  }
+
+  .timeline-phase {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .timeline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .timeline-body { color: var(--white-dim); font-size: 13.5px; }
+
+  .timeline-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--white-muted);
+  }
+
+  /* ─── AI FEATURES ─── */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .feature-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .feature-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+
+  .feature-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .feature-body { color: var(--white-dim); font-size: 13px; }
+
+  .feature-tech {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tech-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: rgba(212,168,74,0.08);
+    border: 1px solid rgba(212,168,74,0.2);
+    color: var(--gold);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* ─── TEAM ─── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .team-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+
+  .team-role {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .team-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .team-location {
+    font-size: 11px;
+    color: var(--white-muted);
+    margin-bottom: 10px;
+  }
+
+  .team-body { color: var(--white-dim); font-size: 13px; }
+
+  /* ─── RISK MATRIX ─── */
+  .risk-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+
+  .risk-severity {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .risk-high { background: rgba(224,92,92,0.2); color: var(--red); border: 1px solid rgba(224,92,92,0.3); }
+  .risk-med { background: rgba(245,166,35,0.2); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
+  .risk-low { background: rgba(76,175,125,0.2); color: var(--green); border: 1px solid rgba(76,175,125,0.3); }
+
+  .risk-content { flex: 1; }
+  .risk-title { font-weight: 600; color: var(--white); font-size: 14px; margin-bottom: 4px; }
+  .risk-body { color: var(--white-dim); font-size: 13px; }
+
+  /* ─── STAT CARDS ─── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .stat-card {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--white-muted); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* ─── COMPLIANCE BLOCKS ─── */
+  .compliance-block {
+    background: var(--navy-card);
+    border: 1px solid var(--navy-border);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 16px 0;
+  }
+
+  .compliance-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .compliance-icon { font-size: 20px; }
+
+  .compliance-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .compliance-status { margin-left: auto; }
+
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 6px 0;
+    color: var(--white-dim);
+    font-size: 13.5px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid rgba(212,168,74,0.05);
+  }
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon { color: var(--green); font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+  .warn-icon { color: var(--amber); font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+  .cross-icon { color: var(--red); font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    background: #0A0E18;
+    border: 1px solid rgba(212,168,74,0.15);
+    border-radius: 6px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #C9D1D9;
+    overflow-x: auto;
+    margin: 16px 0;
+    line-height: 1.8;
+  }
+
+  .code-block .comment { color: #6E7D8E; }
+  .code-block .key { color: var(--gold); }
+  .code-block .value { color: var(--green); }
+  .code-block .string { color: #79C0FF; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .main { padding: 0 20px 60px; }
+    .top-banner { padding: 32px 20px 28px; }
+    .toc { padding: 0 20px; }
+    .timeline::before { left: 27px; }
+  }
+
+  /* ─── PRINT UTIL ─── */
+  h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--white); margin: 20px 0 10px; }
+  h4 { font-size: 14px; color: var(--gold); letter-spacing: 0.5px; margin: 16px 0 8px; font-weight: 600; }
+  p { color: var(--white-dim); font-size: 14px; margin: 10px 0; }
+  ul { margin: 10px 0 10px 20px; }
+  ul li { color: var(--white-dim); font-size: 13.5px; padding: 3px 0; }
+  strong { color: var(--white); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  @media(max-width:700px){ .two-col { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+
+<!-- ─── BANNER ─── -->
+<div class="top-banner">
+  <div class="banner-label">Strategic Intelligence Document · June 2026 · Confidential</div>
+  <div class="banner-title">
+    Afiyah Infinity AI<br>
+    <span>Master Analysis & Build Blueprint</span>
+  </div>
+  <div class="banner-sub">Cross-document synthesis, Shariah validation, DIFC regulatory mapping, team structure, AI architecture, and product build roadmap — all tracks aligned.</div>
+  <div class="banner-meta">
+    <span class="badge">Master Harmonisation v1.0 Compliant</span>
+    <span class="badge">ADL Advisory Validated</span>
+    <span class="badge">DIFC Innovation License</span>
+    <span class="badge">Pre-Seed · May 2026</span>
+  </div>
+</div>
+
+<!-- ─── NAV ─── -->
+<nav class="toc">
+  <a href="#s1" class="toc-item active">01 · Market Reality</a>
+  <a href="#s2" class="toc-item">02 · Data Consistency</a>
+  <a href="#s3" class="toc-item">03 · Shariah Validation</a>
+  <a href="#s4" class="toc-item">04 · DIFC Licensing</a>
+  <a href="#s5" class="toc-item">05 · Team</a>
+  <a href="#s6" class="toc-item">06 · AI Architecture</a>
+  <a href="#s7" class="toc-item">07 · Product Build</a>
+  <a href="#s8" class="toc-item">08 · Risk Register</a>
+  <a href="#s9" class="toc-item">09 · Action Track</a>
+</nav>
+
+<div class="main">
+
+<!-- ─── SECTION 1: MARKET ─── -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-number">01</div>
+    <div>
+      <div class="section-title">Market <span>Reality Check</span></div>
+      <div class="section-desc">Industry research calibrated to June 2026 data — Islamic fintech, GCC AI infrastructure, and Muslim women's economic participation.</div>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number">$250B</div>
+      <div class="stat-label">Islamic Fintech Market 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">$341B</div>
+      <div class="stat-label">Projected by 2029 (11.5% CAGR)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1.5%</div>
+      <div class="stat-label">Islamic fintech share of global fintech — massive gap</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">484</div>
+      <div class="stat-label">Islamic fintech firms globally — fragmented</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1.9B</div>
+      <div class="stat-label">Muslim addressable population</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">56%</div>
+      <div class="stat-label">Muslim millennials want Islamic digital banking</div>
+    </div>
+  </div>
+
+  <div class="callout good">
+    <strong>Window of opportunity confirmed:</strong> The GCC is at the exact inflection point between "announcement" and "delivery" for AI infrastructure (Humain Saudi sites, MGX $40B deal). Sovereign AI compute coming online Q2–Q3 2026. Afiyah's DIFC registration now puts it inside the ecosystem before saturation.
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">Category Gap Confirmed</div>
+      <div class="card-body">No platform currently serves Muslim women across Wealth + Health + Barakah as an integrated system. Zoya serves screening (100K users, $250M AUM) but is US-centric, not women-centered, no education, no community. Wahed does robo-advisory. Cur8 does alternatives. <strong>The integrated lifecycle platform does not exist.</strong></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <div class="card-title">Structural Tailwinds</div>
+      <div class="card-body">GCC national visions (Saudi Vision 2030, UAE 2031) explicitly target women's economic participation. Islamic digital banking shifting from front-end to core modernization. 32% of Muslims still lack access to Shariah-compliant banking options — product-market fit confirmed before launch.</div>
+    </div>
+  </div>
+
+  <h3>Competitive Positioning — SANDBOX Cohort 4 Benchmark</h3>
+  <p>Analysis of Oraseya Capital's Cohort 4 (7 companies, $1.05M deployed) confirms Afiyah's thesis: <em>none of the funded startups serve the Muslim woman as primary economic agent across the full faith-finance lifecycle.</em> Zoya is the closest analogue and the most instructive gap.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Afiyah Infinity</th>
+          <th>Zoya</th>
+          <th>Wahed</th>
+          <th>Cur8</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Halal Savings / Goal Wallet</td><td><span class="status status-green">✓ Native</span></td><td>Cash only</td><td>—</td><td>—</td></tr>
+        <tr><td>Zakat Calculation + Distribution</td><td><span class="status status-green">✓ Tracked</span></td><td>✓ Calc</td><td>Calc only</td><td>Annual</td></tr>
+        <tr><td>Waqf / Sadaqah Engine</td><td><span class="status status-green">✓ Native</span></td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>Women-Only Circles</td><td><span class="status status-green">✓ Core</span></td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>Financial Literacy Academy</td><td><span class="status status-green">✓ Faith-aligned</span></td><td>Blog only</td><td>Blog only</td><td>✓ IFG</td></tr>
+        <tr><td>Health / Wellness Layer</td><td><span class="status status-green">✓ Native</span></td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td>Bangladesh + GCC Architecture</td><td><span class="status status-green">✓ Both</span></td><td>US-centric</td><td>UK+US+MY</td><td>UK-centric</td></tr>
+        <tr><td>Independent Shariah Advisory</td><td><span class="status status-green">✓ ADL</span></td><td>✓ Yes</td><td>✓ Yes</td><td>✓ Yes</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── SECTION 2: DATA CONSISTENCY ─── -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-number">02</div>
+    <div>
+      <div class="section-title">Cross-Document <span>Data Consistency Audit</span></div>
+      <div class="section-desc">Every number, name, and claim cross-checked across all uploaded documents against the Master Harmonisation Register v1.0.</div>
+    </div>
+  </div>
+
+  <div class="callout good">
+    <strong>Overall verdict:</strong> Documents are substantially harmonised. Master Harmonisation Register (MHR v1.0) has successfully aligned brand identity, regulatory language, and revenue model across investor pager, DIFC application, ADL proposal, and LOI. Minor gaps flagged below — none are material to the DIFC application.
+  </div>
+
+  <h3>Consistent & Locked ✓</h3>
+  <div class="compliance-block">
+    <ul class="checklist">
+      <li><span class="check-icon">✓</span> <strong>Legal entity name:</strong> "Afiyah Infinity AI Ltd." used consistently across all docs</li>
+      <li><span class="check-icon">✓</span> <strong>Domain:</strong> www.afiyahinfinityai.com in all footers (legacy redirect confirmed)</li>
+      <li><span class="check-icon">✓</span> <strong>Founder title:</strong> "Maisha Tabassum Beg, Founder & CEO" consistent</li>
+      <li><span class="check-icon">✓</span> <strong>Seed ask:</strong> USD 250K–500K, 12–18 month runway consistently stated</li>
+      <li><span class="check-icon">✓</span> <strong>MVP budget:</strong> $35K–$120K build, $400–$700/month infra, 500–2K users</li>
+      <li><span class="check-icon">✓</span> <strong>Shariah partner:</strong> ADL Advisory, MYR 1,500/month retainer, AAOIFI standards</li>
+      <li><span class="check-icon">✓</span> <strong>Non-custodial positioning:</strong> "no deposits, no custody, no advice" language consistent</li>
+      <li><span class="check-icon">✓</span> <strong>DIFC phase logic:</strong> Phase 1 MVP non-regulated, Phase 3 potential regulated path — aligned</li>
+      <li><span class="check-icon">✓</span> <strong>Revenue streams:</strong> 7 locked streams in MHR match deck and investor pager</li>
+      <li><span class="check-icon">✓</span> <strong>Year-5 mix:</strong> Subscription 64%, Academy 25%, B2B+Other 11% — locked</li>
+      <li><span class="check-icon">✓</span> <strong>ADL services scope:</strong> Shariah structure, review, certification, ongoing oversight — all docs match</li>
+    </ul>
+  </div>
+
+  <h3>Gaps to Address ⚠</h3>
+  <div class="compliance-block">
+    <ul class="checklist">
+      <li><span class="warn-icon">⚠</span> <strong>CTO role:</strong> LOI mentions "Technology and Innovation Head" — no person named. <span class="status status-amber">Action: Formalise Faysal Mahamud as remote CTO; update LOI and team slide</span></li>
+      <li><span class="warn-icon">⚠</span> <strong>Shariah board vs. ADL:</strong> LOI refers to "Shariah Board" in Bangladesh/Malaysia — needs to clarify ADL Advisory is the Shariah governance partner, not a separate Bangladesh-based board</li>
+      <li><span class="warn-icon">⚠</span> <strong>Three-domain model:</strong> Some early slides say "Wealth + Health + Barakah" while DIFC application focuses only on Wealth/finance literacy. Health domain needs explicit mention in DIFC activity description</li>
+      <li><span class="warn-icon">⚠</span> <strong>SWOT pillars naming:</strong> SWOT doc uses "Niyyah Wallet", "Mudarabah-as-a-Marketplace", "Sister Circle" — MHR approved names are "Halal Wallet", "Afiyah Marketplace", "SisTech Circle". Align all to MHR names</li>
+      <li><span class="warn-icon">⚠</span> <strong>Budget analysis (Shwapno):</strong> FY2526 Budget doc is from Shwapno retail company — this is Maisha's current employer, not Afiyah. Confirm this doc is for professional context only, not to be circulated with Afiyah investor materials</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ─── SECTION 3: SHARIAH VALIDATION ─── -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-number">03</div>
+    <div>
+      <div class="section-title">Shariah <span>Compliance Validation</span></div>
+      <div class="section-desc">Every platform feature and revenue stream validated against AAOIFI standards and ADL Advisory's proposed scope. Red flags and rewordings identified.</div>
+    </div>
+  </div>
+
+  <div class="callout good">
+    <strong>Core platform is Shariah-clean.</strong> The non-custodial, education-first, partner-led architecture was clearly designed with Shariah compliance as the primary constraint, not an afterthought. ADL's engagement (Dr. Mufti Yousuf Sultan, CSAA-AAOIFI) is the strongest possible advisory arrangement for a fintech at this stage.
+  </div>
+
+  <h3>Feature-by-Feature Shariah Assessment</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Shariah Status</th><th>Basis</th><th>Action Required</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Afiyah AI Coach</strong><br><small>Educational, RAG-powered</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>Education only, no personalised advice, Shariah-reviewed KB</td>
+          <td>ADL must vet knowledge base content before launch. No fatwa-issuing capability.</td>
+        </tr>
+        <tr>
+          <td><strong>Halal Wallet / Goal Tracker</strong><br><small>Non-custodial tracking only</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>Display/tracking only; no custody or money movement = outside regulated perimeter</td>
+          <td>Language must say "goal tracking" not "wallet" if there is any confusion. Partner banks hold funds.</td>
+        </tr>
+        <tr>
+          <td><strong>Zakat Calculator</strong><br><small>Computation engine</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>User inputs own asset data; calculation uses established nisab methodologies</td>
+          <td>ADL to validate the calculation methodology. Reference AAOIFI Zakat standards explicitly.</td>
+        </tr>
+        <tr>
+          <td><strong>Afiyah Academy</strong><br><small>Financial literacy, certifications</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>Education is explicitly permitted; content must be Shariah-reviewed</td>
+          <td>ADL scope covers "Marketing, Media and Social Content Review" and "Knowledge Base Vetting" — activate this.</td>
+        </tr>
+        <tr>
+          <td><strong>SisTech Circle / Community</strong><br><small>Women-only peer community</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>Social/community layer has no financial mechanism at MVP — pure education and support</td>
+          <td>Once peer-saving circles or micro-Mudarabah features are added, ADL must review the contract structure first.</td>
+        </tr>
+        <tr>
+          <td><strong>Afiyah Marketplace</strong><br><small>Platform intermediary for halal SMEs</small></td>
+          <td><span class="status status-amber">⚠ Conditional</span></td>
+          <td>Platform technology layer is clean; referral fees need contract review</td>
+          <td><strong>Revenue Stream 07 (Marketplace + Partner Referrals)</strong>: referral commissions from Islamic banks / takaful must be structured as Wakala (agency fee), not interest or undisclosed commission. ADL to review each partner contract before signing.</td>
+        </tr>
+        <tr>
+          <td><strong>Impact Analytics</strong><br><small>Aggregate reporting for NGOs/DFIs</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>Anonymised aggregate data; no personal data sale; privacy-preserving</td>
+          <td>Data governance policy must be reviewed by ADL for any Shariah data-ethics implications.</td>
+        </tr>
+        <tr>
+          <td><strong>Health & Wellness Layer</strong><br><small>Fasting, prayer, nutrition, mental health</small></td>
+          <td><span class="status status-green">✓ Clean</span></td>
+          <td>Wellness content is educational; no medical advice claim</td>
+          <td>Explicitly outside financial Shariah scope. Standard healthcare disclaimer applies. ADL oversight not required here — but content quality controls needed.</td>
+        </tr>
+        <tr>
+          <td><strong>Mudarabah Investment Pools</strong><br><small>Phase 2+ only — not in MVP</small></td>
+          <td><span class="status status-amber">⚠ Phase-gated</span></td>
+          <td>Mudarabah is a valid Islamic contract (AAOIFI Standard 13)</td>
+          <td>Cannot launch without: (a) ADL full structural review, (b) DFSA Innovation Testing License or regulated partner to hold/manage pools, (c) a licensed Islamic bank as Rab-ul-Maal counterparty. <strong>Do not describe this in MVP materials without phase-gating language.</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Waqf Engine</strong><br><small>Phase 3+ only</small></td>
+          <td><span class="status status-red">🔴 Regulatory</span></td>
+          <td>Waqf endowments require regulatory supervision in UAE (Awqaf UAE) and a licensed trustee</td>
+          <td>Must engage UAE's General Authority of Islamic Affairs and Endowments (Awqaf) before any Waqf product launch. ADL can advise on structure but a UAE-licensed Waqf trustee is legally required.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>ADL Advisory — What They Will Deliver for Afiyah</h3>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Initial Review & Certification</div>
+      <div class="card-body">
+        <ul>
+          <li>Full platform structural review (contracts, operations, policies)</li>
+          <li>AAOIFI-aligned Shariah compliance assessment</li>
+          <li>Up to 3 review rounds (max 1 month total)</li>
+          <li>Shariah Compliance Certificate upon satisfaction</li>
+          <li>Certification = essential for investor credibility and DIFC positioning</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ongoing Oversight (MYR 1,500/month)</div>
+      <div class="card-body">
+        <ul>
+          <li>Bi-monthly Shariah governance meetings</li>
+          <li>Ad hoc query response</li>
+          <li>Marketing, media & social content vetting</li>
+          <li>Knowledge base and training source review</li>
+          <li>Shariah Risk Management framework</li>
+          <li>Governance & Ethics guideline preparation</li>
+          <li>Annual re-certification waived (included in retainer)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>ADL Founder profile:</strong> Dr. Mufti Yousuf Sultan — CSAA (AAOIFI Bahrain), PhD Islamic Finance INCEIF, Registered Shariah Adviser with SC Malaysia and Labuan FSA, active AAOIFI Working Group member. Clients across 20+ countries. Cambridge Islamic Funds Award 2026. <strong>This is not a generic Shariah consultant — this is institutional-grade governance.</strong>
+  </div>
+
+  <h3>Language That Needs to Change or Stay Guarded</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>What You Might Say</th><th>Shariah Risk</th><th>Use Instead</th></tr></thead>
+      <tbody>
+        <tr><td>"Shariah-certified platform"</td><td>Only after ADL issues certificate — premature</td><td>"Under Shariah review by ADL Advisory" until certificate received</td></tr>
+        <tr><td>"Investment returns" or "guaranteed returns"</td><td>Riba / Gharar</td><td>"Profit-sharing ratios" or "expected returns based on Mudarabah pool performance"</td></tr>
+        <tr><td>"Wallet" with any implication of stored value</td><td>Deposit-taking regulation trigger</td><td>"Goal tracking wallet" or "non-custodial financial goal tracker"</td></tr>
+        <tr><td>"Invest with us"</td><td>Investment advice / fund management trigger</td><td>"Learn about Islamic investment principles" / "connect with licensed investment partners"</td></tr>
+        <tr><td>"Mudarabah pools available now"</td><td>Phase-gated — regulatory & Shariah</td><td>Describe as Phase 2+ roadmap item, pending DFSA ITL or partner licensing</td></tr>
+        <tr><td>"Waqf donations accepted"</td><td>UAE Awqaf regulatory requirement</td><td>"Future Waqf features planned with licensed UAE trustee partnership"</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ─── SECTION 4: DIFC LICENSING ─── -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-number">04</div>
+    <div>
+      <div class="section-title">DIFC <span>Licensing Pathway</span></div>
+      <div class="section-desc">Full regulatory position analysis — what is permitted, what requires re-wording, and what requires additional authority approval at each phase.</div>
+    </div>
+  </div>
+
+  <div class="callout good">
+    <strong>Green light for DIFC Innovation License (Non-Regulated).</strong> All MVP activities fit cleanly within the approved activity descriptions. The application architecture was well-designed. The following analysis confirms this and flags the evolution pathway.
+  </div>
+
+  <h3>Innovation License — Activity Mapping</h3>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Afiyah Activity</th><th>DIFC Activity Code</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>AI Coach, platform software, app development</td>
+          <td>Computer Systems and Software Designing</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Core activity. Clean fit.</td>
+        </tr>
+        <tr>
+          <td>RAG AI research, model fine-tuning, feature R&D</td>
+          <td>Technology Research & Development</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Explicitly includes AI R&D.</td>
+        </tr>
+        <tr>
+          <td>Islamic fintech consulting to B2B/B2G clients</td>
+          <td>Information Technology Consultants</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Requires BSc + 3yr experience (Maisha qualifies via Mercer / Shwapno background).</td>
+        </tr>
+        <tr>
+          <td>Academy e-learning platform</td>
+          <td>Education Technologies Research & Development / Education & Training Computer Software</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Both activity codes apply. Education tech is explicitly in scope.</td>
+        </tr>
+        <tr>
+          <td>Marketplace web platform and portal</td>
+          <td>Portal / Internet Content Provider</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Platform-as-infrastructure for discovery and referral. No goods trading or financial custody.</td>
+        </tr>
+        <tr>
+          <td>Impact analytics reporting</td>
+          <td>Data Classification & Analysis Services</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Aggregate anonymised data analysis for NGOs / DFIs — exact match to activity description.</td>
+        </tr>
+        <tr>
+          <td>Islamic fintech strategy consulting</td>
+          <td>Management Consultancy (via Innovation License supplementary)</td>
+          <td><span class="status status-green">✓ Permitted</span></td>
+          <td>Confirmed in LOI Phase 1 activities.</td>
+        </tr>
+        <tr>
+          <td>Mudarabah investment pool facilitation</td>
+          <td>NOT permitted under Innovation License</td>
+          <td><span class="status status-red">🔴 Regulated</span></td>
+          <td>Requires DFSA Category 3C or Innovation Testing License. <strong>Phase-gate this explicitly.</strong></td>
+        </tr>
+        <tr>
+          <td>Zakat disbursement / charity transfers</td>
+          <td>NOT permitted (payment processing)</td>
+          <td><span class="status status-amber">⚠ Partner-only</span></td>
+          <td>Must route via licensed payment/charity partner. Afiyah provides the calculation and intent layer only.</td>
+        </tr>
+        <tr>
+          <td>Partner referral commissions (Marketplace Rev 07)</td>
+          <td>Grey area — technology referral vs. arranging</td>
+          <td><span class="status status-amber">⚠ Review wording</span></td>
+          <td>If structured as technology licensing fee (not commission on financial product), it stays non-regulated. Seek DIFC legal counsel confirmation before launch of partner revenue. <strong>Do not call it brokerage.</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Phased Regulatory Evolution</h3>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot">I</div>
+      <div class="timeline-content">
+        <div class="timeline-phase">Phase 1 · Q3–Q4 2026</div>
+        <div class="timeline-title">DIFC Innovation License — Non-Regulated ✓</div>
+        <div class="timeline-body">Build and launch: AI Coach, Academy, Halal Wallet (tracking), Zakat Calculator, Community MVP. No regulated activities. No payments. No custody. Shariah review and certification via ADL. Seed round $250K–500K.</div>
+        <div class="timeline-tags">
+          <span class="tag">Computer Systems & Software</span>
+          <span class="tag">Education Technologies</span>
+          <span class="tag">IT Consulting</span>
+          <span class="tag">Data Analysis</span>
+          <span class="tag">Portal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot">II</div>
+      <div class="timeline-content">
+        <div class="timeline-phase">Phase 2 · H1 2027</div>
+        <div class="timeline-title">Marketplace Launch + B2B Licensing — Still Non-Regulated</div>
+        <div class="timeline-body">Launch women-led SME marketplace as platform intermediary. B2B licensing pilots to NGOs/MFIs. Partner referral revenue using Wakala-structured technology fee (ADL-reviewed). Begin Marketplace partner onboarding — licensed Islamic banks, takaful providers.</div>
+        <div class="timeline-tags">
+          <span class="tag">Marketplace Technology</span>
+          <span class="tag">B2B Licensing</span>
+          <span class="tag">Partner Onboarding</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot">III</div>
+      <div class="timeline-content">
+        <div class="timeline-phase">Phase 3 · H2 2027+</div>
+        <div class="timeline-title">DFSA Innovation Testing License (Sandbox) — If Needed</div>
+        <div class="timeline-body">If product evolves to include investment facilitation (Mudarabah pools), arranging financial products, or any form of custody — apply for DFSA ITL (Innovation Testing Licence). This is a sandbox: test with real users under regulatory supervision before full DFSA authorisation. If activities remain platform-intermediary only, ITL may not be required.</div>
+        <div class="timeline-tags">
+          <span class="tag">DFSA ITL Application</span>
+          <span class="tag">Mudarabah Pools (if applicable)</span>
+          <span class="tag">Category 3C Consideration</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot">IV</div>
+      <div class="timeline-content">
+        <div class="timeline-phase">Phase 4 · 2029+</div>
+        <div class="timeline-title">Full DFSA Authorisation or Sovereign Partnership</div>
+        <div class="timeline-body">Full DFSA-regulated status if investment/advisory products launch at scale. Alternative: white-label licensing model where regulated partners hold the license and Afiyah remains the technology and education layer. Sukuk issuance requires full DFSA engagement. Waqf requires UAE Awqaf Authority engagement.</div>
+        <div class="timeline-tags">
+          <span class="tag">DFSA Full Authorisation</span>
+          <span class="tag">Awqaf UAE</span>
+          <span class="tag">Sukuk Infrastructure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <strong>Key DIFC requirement to confirm:</strong> Physical presence required — active DIFC lease. LOI mentions "80 sq ft" office space which is correct for the Ignyte co-working setup. Confirm this is in place at registration. Zero currency restrictions, 100% foreign ownership, no minimum capital — all confirmed for Innovation License.
+  </div>
+</div>
+
+<!-- ─── SECTION 5: TEAM ─── -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-number">05</div>
+    <div>
+      <div class="section-title">Team <span>Structure & Governance</span></div>
+      <div class="section-desc">Year 1 lean model, CTO formalisation, Shariah board integration, and the Year 2 target org — all mapped against MHR v1.0.</div>
+    </div>
+  </div>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-role">Founder & CEO</div>
+      <div class="team-name">Maisha Tabassum Beg</div>
+      <div class="team-location">DIFC, Dubai, UAE</div>
+      <div class="team-body">15+ years across Mercer (superannuation), Rancon (real estate/BD), MACES (education advisory), Shwapno (MD office, Bangladesh's largest retail). Rare combination: regulated finance + operational excellence + cultural authenticity as the user she's building for. <span class="status status-green">Active</span></div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-role">CTO — Remote</div>
+      <div class="team-name">M Faysal Mahamud</div>
+      <div class="team-location">Uttara, Dhaka, Bangladesh</div>
+      <div class="team-body">
+        <strong>15+ years</strong> as Solution Architect & Project Lead. Currently at Connectiya as Project Lead & Solution Architect. Prior: Intake Solutions (Lead PM), Fiftytwo Digital (Head of Division), AsiaOne (Lead PM), Sourcetop (6 years). <br><br>
+        <strong>Tech stack:</strong> PHP/Laravel, .NET Core, Node.js, Python, React, Next.js, React Native, AWS/Azure/GCP, MySQL, MongoDB. PMP® (PMI), CSM (Scrum Alliance), ACMP4.0 (IBA Dhaka). <br><br>
+        <span class="status status-amber">Role: Offer Accepted — Formalise Contract</span>
+      </div>
+    </div>
+
+    <div class="team-card">
+      <div class="team-role">Shariah Governance Partner</div>
+      <div class="team-name">ADL Advisory Sdn Bhd</div>
+      <div class="team-location">Kuala Lumpur, Malaysia (expanding to UAE 2026)</div>
+      <div class="team-body">
+        Led by <strong>Dr. Mufti Yousuf Sultan</strong> (CSAA-AAOIFI, PhD Islamic Finance INCEIF). Registered Shariah Adviser: SC Malaysia + Labuan FSA. AAOIFI Training Partner & Exam Centre. Clients in 20+ countries. Cambridge Islamic Funds Award 2026. <br><br>
+        <strong>Services for Afiyah:</strong> Platform review & certification (max 1 month), bi-monthly oversight, content vetting, Shariah risk framework.<br><br>
+        <strong>Fee:</strong> MYR 1,500/month (no annual re-certification fee). <span class="status status-green">Offer Accepted</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>How Faysal Fits — CTO Role in Detail</h3>
+
+  <div class="callout good">
+    <strong>Faysal is the right hire for this stage.</strong> His profile matches the MVP build perfectly: full-stack delivery, AWS/cloud infrastructure, React Native (mobile app), Node.js/Python (AI backend), Agile/Scrum execution, and 15+ years managing cross-functional teams to budget. Remote from Bangladesh is actually an asset — he can manage the South Asia engineering team while Maisha runs the DIFC entity.
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>CTO Responsibility</th><th>Faysal's Matching Capability</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>MVP architecture (Next.js, Flutter, Supabase, pgvector)</td><td>Full-stack oversight: React, Next.js, React Native, MySQL/Postgres</td><td>CV: Fiftytwo Digital, Intake Solutions, Connectiya</td></tr>
+        <tr><td>AI/RAG infrastructure</td><td>Python, cloud ML infra (AWS ECS, Lambda, Fargate)</td><td>CV: AsiaOne AWS infrastructure oversight</td></tr>
+        <tr><td>Beta: NestJS, Keycloak, Redis, managed Postgres</td><td>Node.js, .NET Core, database architecture</td><td>CV: enterprise-grade architecture at multiple firms</td></tr>
+        <tr><td>Agile sprint delivery</td><td>Certified Scrum Master (CSM), PMP®, ACMP4.0</td><td>Certifications 2020–2023</td></tr>
+        <tr><td>Security & compliance architecture</td><td>Security policies and governance frameworks established at Fiftytwo</td><td>CV: "Established engineering standards, security policies, governance frameworks"</td></tr>
+        <tr><td>Budget & vendor management</td><td>"Managed risks, dependencies, performance metrics" across 4+ companies</td><td>CV: consistent across all roles</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>Action items for CTO formalisation:</strong> (1) Issue a formal offer letter / contract defining remote CTO role, scope, equity/compensation structure. (2) Update DIFC LOI "Technology and Innovation Head" reference with Faysal's name and role. (3) Update investor deck Team slide. (4) Ensure contract complies with both UAE and Bangladesh employment/IP law — remote contractor or service agreement likely cleanest structure at this stage.
+  </div>
+
+  <h3>Year 2 Team Build — 10 Core Roles (MHR Locked)</h3>
+  <div class="card-grid">
+    <div class="card"><div class="card-title">01 · Founder / CEO</div><div class="card-body">Maisha Tabassum Beg — DIFC-based</div></div>
+    <div class="card"><div class="card-title">02 · CTO</div><div class="card-body">Faysal Mahamud — Remote, Dhaka</div></div>
+    <div class="card"><div class="card-title">03 · COO / Admin Lead</div><div class="card-body">Operations, DIFC compliance admin, finance</div></div>
+    <div class="card"><div class="card-title">04 · Product Manager</div><div class="card-body">Roadmap, user research, sprint management</div></div>
+    <div class="card"><div class="card-title">05 · Marketing Lead</div><div class="card-body">SisTech community growth, campaigns</div></div>
+    <div class="card"><div class="card-title">06 · Community Lead</div><div class="card-body">SisTech circles, moderation, engagement</div></div>
+    <div class="card"><div class="card-title">07 · Content & Education</div><div class="card-body">Academy modules, Shariah-reviewed content</div></div>
+    <div class="card"><div class="card-title">08 · Compliance & Governance</div><div class="card-body">ADL liaison, data privacy, DIFC compliance</div></div>
+    <div class="card"><div class="card-title">09 · Data & Analytics</div><div class="card-body">Impact dashboard, user analytics, reporting</div></div>
+    <div class="card"><div class="card-title">10 · Customer Success</div><div class="card-body">Onboarding, support, retention</div></div>
+  </div>
+</div>
+
+<!-- ─── SECTION 6: AI ARCHITECTURE ─── -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-number">06</div>
+    <div>
+      <div class="section-title">AI <span>Architecture & Usability</span></div>
+      <div class="section-desc">How AI makes every layer of Afiyah smarter — from the Coach to the wallet to the marketplace. Technology choices calibrated to the $35K–$120K MVP budget.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    The investor pager specifies: <strong>Next.js · Flutter · Supabase · pgvector · OpenAI</strong> for MVP. This is a solid, cost-effective, AI-native stack. The architecture below expands on how AI enhances each product pillar with specific implementation approaches.
+  </div>
+
+  <h3>The Afiyah AI Stack — Layer by Layer</h3>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-label">Core Intelligence Layer</div>
+      <div class="feature-title">RAG-Powered Afiyah AI Coach</div>
+      <div class="feature-body">
+        A Retrieval-Augmented Generation system built on a Shariah-reviewed knowledge base. Users ask questions about Islamic finance, Zakat, halal investing, fasting, wellness — and the Coach retrieves contextually accurate, ADL-vetted responses. Every answer cites its source (Quran, Hadith, AAOIFI standard, or Academy module). <strong>No hallucinated fatwas.</strong>
+        <br><br>
+        Key design principle: the Coach is always in "educational mode", never "advisory mode". If a question crosses into personalised investment advice, it redirects to a licensed partner or a qualified human advisor.
+      </div>
+      <div class="feature-tech">
+        <span class="tech-pill">pgvector (Supabase)</span>
+        <span class="tech-pill">OpenAI GPT-4o</span>
+        <span class="tech-pill">RAG pipeline</span>
+        <span class="tech-pill">Citation-first responses</span>
+        <span class="tech-pill">ADL content vetting</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">Personalisation Engine</div>
+      <div class="feature-title">Intelligent Goal & Wellness Tracker</div>
+      <div class="feature-body">
+        AI learns each user's financial patterns, faith-cycle events (Ramadan, Hajj saving stage), and life stage (new mother, student, professional). It proactively nudges: "Your Hajj goal needs AED 200 more this month" or "You've achieved Zakat nisab on your savings — here's how to calculate." <br><br>
+        Wellness layer: fasting schedule awareness, prayer-time context (no fitness notifications at Fajr), halal nutrition suggestions. Cross-domain AI awareness is the product's key differentiator.
+      </div>
+      <div class="feature-tech">
+        <span class="tech-pill">User embeddings</span>
+        <span class="tech-pill">Context-aware prompting</span>
+        <span class="tech-pill">Supabase realtime</span>
+        <span class="tech-pill">Push notifications</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">Education Intelligence</div>
+      <div class="feature-title">Adaptive Academy Learning Paths</div>
+      <div class="feature-body">
+        AI maps each user's knowledge baseline and recommends a personalised learning path. Beginner: "What is Riba?" → Intermediate: "How do Mudarabah returns work?" → Advanced: "How to structure a halal business as Musharakah?" <br><br>
+        AI generates practice quiz questions, identifies knowledge gaps, and tracks certification progress. Content is cross-referenced against ADL-approved Shariah sources.
+      </div>
+      <div class="feature-tech">
+        <span class="tech-pill">Knowledge graph</span>
+        <span class="tech-pill">Adaptive quiz generation</span>
+        <span class="tech-pill">Progress ML model</span>
+        <span class="tech-pill">AAOIFI curriculum mapping</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">Community Intelligence</div>
+      <div class="feature-title">SisTech Smart Matching</div>
+      <div class="feature-body">
+        AI matches users to the right Sister Circle based on: life stage, financial goals, geographic proximity, language preference (Arabic/Bangla/English), and faith-activity level. Prevents random community formation — makes every connection intentional. <br><br>
+        Also matches women entrepreneurs in the Marketplace to relevant mentors, advisors, and potential co-founders from the community.
+      </div>
+      <div class="feature-tech">
+        <span class="tech-pill">Embedding similarity</span>
+        <span class="tech-pill">Multi-attribute matching</span>
+        <span class="tech-pill">Profile vectorization</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">Smart Finance Tools</div>
+      <div class="feature-title">AI Zakat Calculator + Sadaqah Optimizer</div>
+      <div class="feature-body">
+        Beyond simple calculation — AI asks dynamic questions to understand all asset types (gold, savings, business inventory, receivables, investments) and applies the correct AAOIFI Zakat methodology for each. Output: exact Zakat amount + breakdown + suggested distribution partners. <br><br>
+        Sadaqah Optimizer: AI recommends giving amounts based on spending patterns, remaining budget, and causes aligned to the user's stated values.
+      </div>
+      <div class="feature-tech">
+        <span class="tech-pill">Dynamic form AI</span>
+        <span class="tech-pill">AAOIFI Zakat rules engine</span>
+        <span class="tech-pill">Charitable partner API</span>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-label">Content Moderation & Safety</div>
+      <div class="feature-title">Shariah Guardrails System</div>
+      <div class="feature-body">
+        An AI-powered content filter that prevents the Coach from ever: (a) issuing a fatwa or religious ruling, (b) providing personalised investment advice, (c) recommending specific financial products without licensed partner framing, or (d) contradicting ADL-vetted Shariah positions. <br><br>
+        Every AI response is tagged with a confidence score and source reference. Responses below a Shariah-confidence threshold are escalated to human review.
+      </div>
+      <div class="feature-tech">
+        <span class="tech-pill">Output filtering</span>
+        <span class="tech-pill">Confidence scoring</span>
+        <span class="tech-pill">Escalation pipeline</span>
+        <span class="tech-pill">ADL review queue</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>MVP Tech Stack — Budget-Calibrated</h3>
+
+  <div class="code-block">
+    <span class="comment">// AFIYAH MVP STACK — $35K–$120K build, $400–$700/month infra</span><br><br>
+    <span class="key">frontend:</span>  <span class="value">Next.js 14</span>       <span class="comment">// Web app — SSR, fast, SEO</span><br>
+    <span class="key">mobile:</span>    <span class="value">Flutter</span>          <span class="comment">// iOS + Android from single codebase</span><br>
+    <span class="key">backend:</span>   <span class="value">Supabase</span>         <span class="comment">// Postgres, auth, realtime, storage — $25/mo</span><br>
+    <span class="key">vectors:</span>   <span class="value">pgvector</span>         <span class="comment">// RAG knowledge base, embedded in Supabase</span><br>
+    <span class="key">ai:</span>        <span class="value">OpenAI GPT-4o</span>    <span class="comment">// Coach, quiz gen, smart matching</span><br>
+    <span class="key">embeddings:</span> <span class="value">text-embedding-3</span> <span class="comment">// User + content vectorization</span><br><br>
+    <span class="comment">// BETA ADD (H1 2027) — $95K–$220K build, $1.5K–$2.5K/month</span><br>
+    <span class="key">api_gateway:</span> <span class="value">NestJS</span>           <span class="comment">// Modular API layer</span><br>
+    <span class="key">auth:</span>       <span class="value">Keycloak</span>         <span class="comment">// Enterprise-grade identity</span><br>
+    <span class="key">cache:</span>      <span class="value">Redis</span>            <span class="comment">// Session, AI response cache</span><br>
+    <span class="key">cloud:</span>      <span class="value">AWS / Azure</span>      <span class="comment">// Multi-region, GCC data residency</span><br>
+    <span class="key">cdn:</span>        <span class="value">Cloudflare</span>       <span class="comment">// Global edge, DDoS protection</span>
+  </div>
+
+  <div class="callout warn">
+    <strong>Faysal's experience gap to monitor:</strong> Flutter is not in his stated CV (React Native is). At MVP stage, React Native is a valid alternative to Flutter — confirm with Faysal whether Flutter or React Native is preferred. Both achieve cross-platform mobile. Cost of switching to React Native at MVP = zero.
+  </div>
+</div>
+
+<!-- ─── SECTION 7: PRODUCT BUILD ─── -->
+<div class="section" id="s7">
+  <div class="section-header">
+    <div class="section-number">07</div>
+    <div>
+      <div class="section-title">Product <span>Build Roadmap</span></div>
+      <div class="section-desc">Feature-level MVP scope, sequencing, and the dependencies that unlock each phase — from seed funding to 100K users.</div>
+    </div>
+  </div>
+
+  <h3>MVP Scope — What Gets Built First</h3>
+  <p>With $35K–$120K build budget and a target of 500–2K beta users by Q4 2026, the MVP must be ruthlessly focused. Every feature must either (a) generate direct user value, or (b) de-risk the regulatory/Shariah position.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>Priority</th><th>Est. Effort</th><th>Revenue Driver</th><th>Shariah Risk</th></tr></thead>
+      <tbody>
+        <tr><td><strong>User onboarding + profile</strong></td><td><span class="status status-red">P0</span></td><td>1 week</td><td>Retention foundation</td><td>Low</td></tr>
+        <tr><td><strong>Afiyah AI Coach (RAG)</strong></td><td><span class="status status-red">P0</span></td><td>3–4 weeks</td><td>Freemium upgrade trigger</td><td>ADL review required</td></tr>
+        <tr><td><strong>Zakat Calculator</strong></td><td><span class="status status-red">P0</span></td><td>1 week</td><td>Acquisition funnel</td><td>ADL methodology review</td></tr>
+        <tr><td><strong>Halal Goal Wallet (tracking only)</strong></td><td><span class="status status-red">P0</span></td><td>2 weeks</td><td>Habit + retention</td><td>No custody = clean</td></tr>
+        <tr><td><strong>Academy — foundation tier (free)</strong></td><td><span class="status status-red">P0</span></td><td>2 weeks (content)</td><td>Academy subscription upsell</td><td>Content vetting required</td></tr>
+        <tr><td><strong>SisTech Community (basic circles)</strong></td><td><span class="status status-amber">P1</span></td><td>2 weeks</td><td>Community moat</td><td>Moderation policy needed</td></tr>
+        <tr><td><strong>Subscription paywall (3aam / Istithna'i tiers)</strong></td><td><span class="status status-amber">P1</span></td><td>1 week</td><td>Direct SaaS revenue</td><td>Low</td></tr>
+        <tr><td><strong>Wellness tracker (fasting, prayer alignment)</strong></td><td><span class="status status-amber">P1</span></td><td>2 weeks</td><td>Differentiation + retention</td><td>Low</td></tr>
+        <tr><td><strong>Impact dashboard (basic)</strong></td><td><span class="status status-blue">P2</span></td><td>2 weeks</td><td>B2G/NGO pipeline</td><td>Low</td></tr>
+        <tr><td><strong>Marketplace (Phase 2)</strong></td><td><span class="status status-blue">P2</span></td><td>4–6 weeks</td><td>Marketplace + partner rev</td><td>ADL partner contract review</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The Build Sequence — 16-Week MVP Sprint</h3>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">🏗️</div>
+      <div class="card-title">Weeks 1–4: Foundation</div>
+      <div class="card-body">Infrastructure setup (Supabase, Next.js, Flutter), auth system, user profiles, basic onboarding. Faysal leads architecture. Shariah knowledge base population begins (ADL vetting content).</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">Weeks 5–8: AI Coach</div>
+      <div class="card-body">RAG pipeline built over pgvector knowledge base. AI Coach MVP shipped with basic Q&A. Zakat calculator v1. Goal wallet with category tracking. ADL conducts first content review.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📚</div>
+      <div class="card-title">Weeks 9–12: Academy + Community</div>
+      <div class="card-body">Academy foundation modules published (free tier). SisTech Circle beta launched. Subscription paywall added. Wellness tracker basic features shipped. First 100 beta users onboarded.</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚀</div>
+      <div class="card-title">Weeks 13–16: Polish + Launch</div>
+      <div class="card-body">Shariah certification received from ADL. UI/UX refinement. Performance optimisation. ADL compliance audit pass. Beta launch at 500–2K users. Revenue: first subscriptions. Seed round pitch with live product.</div>
+    </div>
+  </div>
+
+  <h3>Key Build Dependencies — Don't Miss These</h3>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-high">HIGH</div>
+    <div class="risk-content">
+      <div class="risk-title">ADL Review Must Precede AI Coach Launch</div>
+      <div class="risk-body">The Shariah knowledge base must be vetted by ADL before any user can interact with the AI Coach. ADL timeline: max 3 weeks for initial review + 3 working days for certification. Start content population immediately, submit for review at Week 6, target certification by Week 10.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-med">MED</div>
+    <div class="risk-content">
+      <div class="risk-title">DIFC Lease / Physical Presence Required Before Registration</div>
+      <div class="risk-body">Innovation License requires an active DIFC lease. Contact Amrita Divay at DIFC (confirmed in LOI) to confirm Ignyte co-working space availability. 80 sq ft is sufficient. This is the gating item for entity registration.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-med">MED</div>
+    <div class="risk-content">
+      <div class="risk-title">Faysal Contract Before Architecture Decisions</div>
+      <div class="risk-body">CTO contract must be signed before architecture decisions are locked. IP assignment, equity vesting, and deliverable milestones need to be clear. Without a signed contract, Faysal's work product may not be owned by Afiyah Infinity AI Ltd.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-low">LOW</div>
+    <div class="risk-content">
+      <div class="risk-title">Partner Bank Integration (Phase 2)</div>
+      <div class="risk-body">The Halal Wallet's "partner-held balance visibility" feature requires a licensed Islamic bank API integration. Begin partner conversations (Emirates Islamic, Abu Dhabi Islamic Bank, bKash for Bangladesh) at Phase 1 so integration is ready for Phase 2.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 8: RISKS ─── -->
+<div class="section" id="s8">
+  <div class="section-header">
+    <div class="section-number">08</div>
+    <div>
+      <div class="section-title">Risk <span>Register</span></div>
+      <div class="section-desc">Material risks across Shariah, regulatory, execution, and market — with mitigations mapped to the current document architecture.</div>
+    </div>
+  </div>
+
+  <h3>Shariah Risks</h3>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-high">HIGH</div>
+    <div class="risk-content">
+      <div class="risk-title">AI Coach Issues Inadvertent Religious Ruling</div>
+      <div class="risk-body">RAG system could retrieve Shariah content and frame it as advice for a specific user's situation — crossing from education into fatwa territory. <strong>Mitigation:</strong> ADL vets knowledge base; Shariah guardrails filter all outputs; "I am not a mufti" disclaimer on all Coach responses; escalation path to human advisor clearly signed.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-med">MED</div>
+    <div class="risk-content">
+      <div class="risk-title">Partner Referral Revenue Classified as "Arranging"</div>
+      <div class="risk-body">If DIFC/DFSA views Marketplace partner referral commissions as "arranging financial products," this requires a DFSA license. <strong>Mitigation:</strong> Structure as technology licensing fee (Wakala), not commission. Obtain a legal opinion from a DIFC-qualified lawyer before any partner revenue is recognised. ADL reviews contract structure.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-med">MED</div>
+    <div class="risk-content">
+      <div class="risk-title">Premature Mudarabah Language in Marketing</div>
+      <div class="risk-body">SWOT analysis and some early-stage docs describe Mudarabah investment pools as core features. If these appear in public marketing before Phase 2 regulatory clearance, it could trigger DFSA inquiry. <strong>Mitigation:</strong> All current public/investor materials must phase-gate Mudarabah language clearly ("Phase 2, pending DFSA Innovation Testing License").</div>
+    </div>
+  </div>
+
+  <h3>Execution Risks</h3>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-high">HIGH</div>
+    <div class="risk-content">
+      <div class="risk-title">Single-Point CTO Dependency</div>
+      <div class="risk-body">Faysal is remote, currently employed full-time at Connectiya. Availability and commitment level need to be confirmed. If he is part-time at MVP stage, build timelines will slip. <strong>Mitigation:</strong> Define clear time commitment in contract (e.g., minimum 20 hrs/week MVP, full-time post-seed). Identify 1 backup senior engineer in Bangladesh as contingency.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-med">MED</div>
+    <div class="risk-content">
+      <div class="risk-title">ADL Certification Delay</div>
+      <div class="risk-body">ADL's "max 1 month" timeline assumes prompt client cooperation. If knowledge base content is not ready or requires multiple revision rounds, AI Coach launch slips. <strong>Mitigation:</strong> Begin knowledge base population immediately. Assign a dedicated content owner (Maisha or content hire). Submit ADL review by Week 6 of build — not Week 12.</div>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-severity risk-low">LOW</div>
+    <div class="risk-content">
+      <div class="risk-title">Seed Funding Gap</div>
+      <div class="risk-body">$250K–$500K ask at pre-seed with no revenue and a pre-MVP product. DIFC ecosystem (Ignyte) and ADL credibility are strong signals. Shariah board and CTO named = derisk. <strong>Mitigation:</strong> DIFC registration first (credibility signal). ADL certification received before investor pitch. Live MVP demo at pitch round.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── SECTION 9: ACTION TRACK ─── -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <div class="section-number">09</div>
+    <div>
+      <div class="section-title">Priority <span>Action Track</span></div>
+      <div class="section-desc">The next 90 days — sequenced, owner-assigned, and gated against dependencies.</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Action</th><th>Owner</th><th>Deadline</th><th>Gates</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="status status-red">NOW</span></td>
+          <td><strong>Formalise Faysal CTO contract</strong> — remote contractor agreement, IP assignment, time commitment, equity/compensation</td>
+          <td>Maisha</td>
+          <td>Week 1</td>
+          <td>Everything else in tech depends on this</td>
+        </tr>
+        <tr>
+          <td><span class="status status-red">NOW</span></td>
+          <td><strong>Confirm DIFC Ignyte co-working lease</strong> — contact Amrita Divay, confirm 80 sq ft availability, sign lease</td>
+          <td>Maisha</td>
+          <td>Week 1</td>
+          <td>Required for DIFC entity registration</td>
+        </tr>
+        <tr>
+          <td><span class="status status-red">NOW</span></td>
+          <td><strong>Sign ADL Advisory service agreement</strong> — MYR 1,500/month retainer begins. Request kickoff meeting to start platform structural review</td>
+          <td>Maisha</td>
+          <td>Week 1</td>
+          <td>Shariah certification required before AI Coach launch</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>DIFC entity registration</strong> — submit Innovation License application with finalised activity list (Computer Systems, Technology R&D, Education Technologies, Data Analysis, Portal, IT Consulting)</td>
+          <td>Maisha + DIFC lawyer</td>
+          <td>Week 2–3</td>
+          <td>Lease confirmed, LOI submitted</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Update investor deck Team slide</strong> — add Faysal as CTO (remote, Bangladesh), add ADL Advisory as Shariah Governance Partner with Dr. Sultan's credentials</td>
+          <td>Maisha</td>
+          <td>Week 2</td>
+          <td>Faysal contract signed</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Start Shariah knowledge base population</strong> — Islamic finance fundamentals, Zakat methodologies, Mudarabah basics, halal investing principles. Target 500+ content units for ADL review</td>
+          <td>Maisha + Content hire</td>
+          <td>Week 4</td>
+          <td>ADL review can begin once 200+ units ready</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Faysal begins MVP architecture</strong> — Supabase setup, Next.js project scaffold, pgvector configuration, Flutter/React Native baseline</td>
+          <td>Faysal (CTO)</td>
+          <td>Week 3–4</td>
+          <td>Contract signed</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Submit knowledge base to ADL for review</strong> — target 3-week review cycle, Shariah certification received by Week 10</td>
+          <td>Maisha + ADL</td>
+          <td>Week 6</td>
+          <td>200+ content units ready</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Align all external documents to MHR v1.0</strong> — SWOT product names (Niyyah Wallet → Halal Wallet), three-domain language in DIFC docs, remove premature Mudarabah claims from public materials</td>
+          <td>Maisha</td>
+          <td>Week 4</td>
+          <td>MHR is locked source of truth</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>AI Coach MVP shipped (internal)</strong> — RAG pipeline live, first 50 beta users</td>
+          <td>Faysal + Maisha</td>
+          <td>Week 8–10</td>
+          <td>ADL certification received</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Seed investor outreach begins</strong> — DIFC Ignyte network, Islamic fintech VCs (Wa'ed, Shorooq Partners, Algebra Ventures), impact investors aligned to Muslim women's economic participation</td>
+          <td>Maisha</td>
+          <td>Week 10</td>
+          <td>ADL certification in hand, DIFC registered, MVP demo-able</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>First 500 beta users</strong> — GCC Muslim women, Bangladesh pilot cohort, diaspora UK/Canada. SisTech circles seeded. First subscriptions.</td>
+          <td>Maisha + Community Lead</td>
+          <td>Week 16</td>
+          <td>Full MVP live</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="callout good">
+    <strong>North Star:</strong> By end of Q4 2026, Afiyah Infinity AI Ltd. is a <em>registered DIFC entity</em>, with a <em>Shariah-certified platform</em>, a <em>named CTO</em>, a <em>live MVP</em>, and <em>500+ paying beta users</em>. That is the minimum credible position for a seed round and GCC market entry. Everything in this document points toward that single milestone.
+  </div>
+
+  <div style="text-align:center; padding: 40px 0 0;">
+    <div style="font-family:'Playfair Display',serif; font-size:22px; color:var(--gold); margin-bottom:8px;">Halal Wealth. Real Impact. Eternal Barakah.</div>
+    <div style="font-size:12px; letter-spacing:2px; color:var(--white-muted); text-transform:uppercase;">Afiyah Infinity AI Ltd. · DIFC, Dubai · May 2026 · Confidential</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('.section');
+  const tocItems = document.querySelectorAll('.toc-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocItems.forEach(item => item.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`.toc-item[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

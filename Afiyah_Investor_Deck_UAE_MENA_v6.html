@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Afiyah Infinity AI · UAE & MENA Investor Deck v6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:wght@300;400;500&family=Amiri&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A96E; --gold-lt:#E3C893; --gold-dp:#A9854C;
+  --cream:#F3ECDD; --cream-dim:#C9BEA8;
+  --emerald1:#0E3026; --emerald2:#06160F;
+  --navy1:#0E2740; --navy2:#060E18;
+  --plum1:#2A1733; --plum2:#140A18;
+  --maroon1:#3A1320; --maroon2:#1A0710;
+  --teal1:#0B2E2C; --teal2:#04110F;
+  --green:#5FB97F;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:'Jost',sans-serif;background:#05080a;color:var(--cream);-webkit-font-smoothing:antialiased;overflow:hidden}
+.serif{font-family:'Cormorant Garamond',serif}
+
+/* ---- viewport that holds one scaled slide ---- */
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:24px}
+.scaler{
+  /* fixed canvas; JS scales this to fit */
+  width:1280px;height:800px;flex:0 0 auto;transform-origin:center center;position:relative;
+}
+.slide{
+  position:absolute;inset:0;border-radius:5px;overflow:hidden;
+  box-shadow:0 30px 90px rgba(0,0,0,.6);display:none;
+  background:radial-gradient(120% 130% at 50% 0%, var(--c1) 0%, var(--c2) 100%);
+}
+.slide.show{display:block}
+.s-emerald{--c1:var(--emerald1);--c2:var(--emerald2)}
+.s-navy{--c1:var(--navy1);--c2:var(--navy2)}
+.s-plum{--c1:var(--plum1);--c2:var(--plum2)}
+.s-maroon{--c1:var(--maroon1);--c2:var(--maroon2)}
+.s-teal{--c1:var(--teal1);--c2:var(--teal2)}
+
+/* watermark */
+.slide::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.05;
+  background-image:
+    linear-gradient(45deg,transparent 47%,var(--gold) 47%,var(--gold) 48%,transparent 48%),
+    linear-gradient(-45deg,transparent 47%,var(--gold) 47%,var(--gold) 48%,transparent 48%);
+  background-size:128px 128px,128px 128px;background-repeat:repeat;
+}
+.slide::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.045;
+  background-image:repeating-linear-gradient(0deg,transparent 0 63px,var(--gold) 63px 64px),
+                   repeating-linear-gradient(90deg,transparent 0 63px,var(--gold) 63px 64px);
+}
+
+/* frame + corners */
+.frame{position:absolute;inset:22px;border:1px solid rgba(201,169,110,.55);pointer-events:none;z-index:3}
+.frame::before{content:"";position:absolute;inset:5px;border:1px solid rgba(201,169,110,.28)}
+.corner{position:absolute;width:30px;height:30px;z-index:4;pointer-events:none}
+.corner::before,.corner::after{content:"";position:absolute;background:var(--gold)}
+.corner.tl{top:15px;left:15px}.corner.tr{top:15px;right:15px}.corner.bl{bottom:15px;left:15px}.corner.br{bottom:15px;right:15px}
+.corner::before{width:15px;height:1.5px;top:0;left:0}
+.corner::after{width:1.5px;height:15px;top:0;left:0}
+.corner.tr::before{right:0;left:auto}.corner.tr::after{right:0;left:auto}
+.corner.bl::before{bottom:0;top:auto}.corner.bl::after{bottom:0;top:auto}
+.corner.br::before{right:0;left:auto;bottom:0;top:auto}.corner.br::after{right:0;left:auto;bottom:0;top:auto}
+
+/* content: header (auto) / body (fills) / footer (auto) as a flex column */
+.inner{position:absolute;inset:0;z-index:5;padding:56px 76px 64px;display:flex;flex-direction:column}
+
+.lock{text-align:center;flex:0 0 auto}
+.lock .name{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:30px;color:var(--gold);letter-spacing:.02em;line-height:1;display:inline-block}
+.lock .name .inf{color:var(--gold-lt)}
+.lock .tag{display:block;font-size:8.5px;letter-spacing:.5em;color:var(--gold-dp);text-transform:uppercase;margin-top:3px;padding-left:.5em}
+
+.eye{flex:0 0 auto;text-align:center;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin:16px 0 0;display:flex;align-items:center;justify-content:center;gap:14px}
+.eye::before,.eye::after{content:"";width:30px;height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.eye::after{background:linear-gradient(270deg,transparent,var(--gold))}
+
+.h{flex:0 0 auto;font-family:'Cormorant Garamond',serif;font-weight:600;color:var(--gold-lt);text-align:center;line-height:1.05;margin-top:8px}
+.h.lg{font-size:50px}.h.md{font-size:40px}
+.h em{font-style:italic;color:var(--cream)}
+.star{flex:0 0 auto;text-align:center;color:var(--gold);font-size:13px;margin:12px 0 2px;letter-spacing:.5em}
+
+/* BODY fills remaining space and centers its children; never grows the slide */
+.body{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;overflow:hidden}
+
+.intro{font-family:'Cormorant Garamond',serif;font-size:18px;line-height:1.5;color:var(--cream);text-align:center;max-width:60ch;margin:0 auto;font-weight:400}
+.intro.dim{color:var(--cream-dim)}
+
+/* feature list */
+.flist{max-width:780px;margin:0 auto;width:100%}
+.flist .row{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px solid rgba(201,169,110,.13)}
+.flist .row:last-child{border-bottom:none}
+.flist .dia{color:var(--gold);font-size:13px;flex:0 0 auto}
+.flist .term{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:21px;color:var(--cream);flex:0 0 auto}
+.flist .desc{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream-dim)}
+
+/* stats */
+.stats{display:grid;gap:24px;max-width:940px;margin:0 auto;width:100%}
+.s3{grid-template-columns:repeat(3,1fr)}.s4{grid-template-columns:repeat(4,1fr)}
+.stat{text-align:center;padding:0 8px}
+.stat .k{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dp);margin-bottom:8px}
+.stat .n{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:42px;color:var(--gold);line-height:1}
+.stat .n.sm{font-size:32px}
+.stat .l{font-size:11px;color:var(--cream-dim);line-height:1.45;margin-top:8px}
+.stat.div{border-left:1px solid rgba(201,169,110,.2)}
+
+/* table */
+.tbl{width:100%;max-width:940px;margin:0 auto;border-collapse:collapse}
+.tbl th{font-family:'Jost';font-weight:400;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);text-align:right;padding:9px 14px;border-bottom:1px solid rgba(201,169,110,.5)}
+.tbl th:first-child{text-align:left}
+.tbl td{padding:9px 14px;text-align:right;color:var(--cream);border-bottom:1px solid rgba(201,169,110,.1);font-size:14px}
+.tbl td:first-child{text-align:left;color:var(--cream-dim);font-family:'Cormorant Garamond',serif;font-size:17px}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .em td{color:var(--gold-lt);font-weight:500}
+.tbl .em td:first-child{color:var(--gold);font-weight:600}
+.pos{color:var(--green)}.neg{color:#D98A93}
+.tbl tr.tot td{border-top:1px solid rgba(201,169,110,.5);color:var(--gold-lt);font-weight:600;padding-top:12px}
+.tbl tr.tot td:first-child{color:var(--gold)}
+
+/* mini cards */
+.mini{display:grid;gap:16px;max-width:940px;margin:0 auto;width:100%}
+.m2{grid-template-columns:1fr 1fr}.m3{grid-template-columns:repeat(3,1fr)}
+.mcard{border:1px solid rgba(201,169,110,.25);border-radius:3px;padding:15px 18px;text-align:center}
+.mcard.fill{background:rgba(201,169,110,.08)}
+.mcard .mh{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:var(--gold);margin-bottom:6px}
+.mcard .mt{font-size:11.5px;color:var(--cream-dim);line-height:1.5}
+.mcard .mt b{color:var(--cream);font-weight:500}
+
+/* revenue bars */
+.rev{display:flex;align-items:flex-end;gap:24px;height:188px;max-width:780px;margin:0 auto;width:100%;padding:0 8px}
+.rev .c{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end}
+.rev .bar{width:56%;background:linear-gradient(180deg,var(--gold-lt),var(--gold-dp));border-radius:2px 2px 0 0}
+.rev .c:last-child .bar{background:linear-gradient(180deg,#7FD89D,#3E8E5C)}
+.rev .v{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16px;color:var(--gold-lt)}
+.rev .c:last-child .v{color:var(--green)}
+.rev .y{font-size:10px;letter-spacing:.16em;color:var(--cream-dim);text-transform:uppercase}
+
+/* funds bar */
+.fbar{display:flex;height:26px;border-radius:2px;overflow:hidden;max-width:940px;margin:0 auto;width:100%}
+.fbar span{display:flex;align-items:center;justify-content:center;font-size:10px;color:#0d0d0d;font-weight:500}
+
+/* boundaries */
+.bound{columns:2;column-gap:48px;max-width:680px;margin:0 auto;font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--cream-dim);line-height:1.95}
+.bound .xx{color:var(--gold);margin-right:8px;font-family:'Jost';font-size:12px}
+
+/* cover */
+.cover .inner{justify-content:center;text-align:center;align-items:center}
+.cover .name-big{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:46px;color:var(--gold);letter-spacing:.02em;line-height:1}
+.cover .name-big .inf{color:var(--gold-lt)}
+.cover .sub-big{font-size:9px;letter-spacing:.55em;color:var(--gold-dp);text-transform:uppercase;margin-top:5px}
+.cover .pill{display:inline-block;margin-top:24px;border:1px solid var(--gold);color:var(--gold);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;padding:7px 18px}
+.cover .ttl{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:48px;color:var(--gold-lt);line-height:1.08;margin-top:24px;max-width:15ch}
+.cover .tl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24px;color:var(--cream);margin-top:6px}
+.cover .ld{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--cream-dim);max-width:54ch;line-height:1.55;margin-top:20px}
+.cover .meta{margin-top:28px;padding-top:18px;border-top:1px solid rgba(201,169,110,.3);font-size:12.5px;letter-spacing:.05em;color:var(--gold);line-height:2}
+
+/* quote */
+.qmark{text-align:center;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:54px;line-height:.4}
+.bigq{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:34px;line-height:1.32;color:var(--gold-lt);text-align:center;max-width:20ch;margin:0 auto}
+.bigq .by{display:block;font-style:normal;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dp);margin-top:22px;font-family:'Jost'}
+
+/* footer */
+.foot{position:absolute;left:76px;right:76px;bottom:30px;z-index:5;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;letter-spacing:.14em;color:var(--gold-dp)}
+.foot .url{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--gold)}
+.foot .nx{letter-spacing:.2em;color:var(--gold)}
+
+/* navbar */
+.navbar{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:60;background:rgba(8,16,12,.94);backdrop-filter:blur(10px);border:1px solid rgba(201,169,110,.45);border-radius:40px;display:flex;align-items:center;gap:16px;padding:8px 15px}
+.navbar button{background:var(--gold);color:#0c1810;border:none;width:34px;height:34px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.navbar button:hover:not(:disabled){background:var(--gold-lt)}
+.navbar button:disabled{opacity:.3;cursor:not-allowed}
+.navbar .count{color:var(--cream);font-size:12px;letter-spacing:.1em;min-width:54px;text-align:center}
+.navbar .count b{color:var(--gold)}
+.navbar .hint{color:#6f7d72;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+
+@media print{
+  @page{size:1280px 800px;margin:0}
+  body{overflow:visible;background:#fff}
+  .stage{position:static;display:block;padding:0}
+  .scaler{transform:none!important;width:1280px;height:800px}
+  .slide{display:block!important;position:relative;page-break-after:always;box-shadow:none;border-radius:0;width:1280px;height:800px;margin:0}
+  .navbar{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="scaler" id="scaler">
+
+<!-- 1 COVER -->
+<section class="slide s-emerald cover show">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div><div class="name-big serif">Afiyah<span class="inf"> &#8734;</span></div><div class="sub-big">Infinity&nbsp;&nbsp;AI</div></div>
+    <span class="pill">Pre-Seed &middot; UAE / MENA &middot; DIFC Innovation Licence</span>
+    <h1 class="ttl serif">The women-first AI platform for faith-aligned growth</h1>
+    <div class="tl serif">together.</div>
+    <p class="ld serif">A women-first digital ecosystem combining learning, wellbeing, financial capability and trusted partner access for Muslim women — built in the UAE for MENA and global markets.</p>
+    <div class="meta">Dubai, UAE &middot; Investor Deck v6 · July 2026<br>Raising $250K–$500K pre-seed · milestone-based valuation discussion<br>Maisha Tabassum Beg &middot; Founder &amp; CEO</div>
+  </div>
+  <div class="foot"><span>01 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">&#10022;</span></div>
+</section>
+
+<!-- 2 PROBLEM -->
+<section class="slide s-maroon">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">The Problem</div>
+    <h2 class="h md serif">She is not understood. <em>Her tools are scattered.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <p class="intro dim">A banking app, a wellness tracker, a Zakat calculator, a charity portal — none speak her language, none let her wisdom compound, and none help her empower the next sister.</p>
+      <div class="stats s4">
+        <div class="stat"><div class="k">The market</div><div class="n">~1B</div><div class="l">estimated Muslim women globally — a large, diverse and underserved audience</div></div>
+        <div class="stat div"><div class="k">VC reach</div><div class="n"><3%</div><div class="l">of global venture funding typically reaches women-only founding teams</div></div>
+        <div class="stat div"><div class="k">Banked, not served</div><div class="n">Gap</div><div class="l">between account access and confident, trusted financial participation</div></div>
+        <div class="stat div"><div class="k">Unpaid care</div><div class="n">Unpaid</div><div class="l">care work constrains time, income growth and financial resilience</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>02 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 3 SOLUTION -->
+<section class="slide s-emerald">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">The Solution</div>
+    <h2 class="h md serif">One platform. <em>Five dimensions.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <div class="flist">
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Wealth</span><span class="desc">Halal goal tracking, Zakat computation, ethical investment literacy</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Health</span><span class="desc">Halal nutrition, fasting cycles, prayer alignment, mental wellness</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Deen</span><span class="desc">Ayah Path Qur'an journeys, Islamic psychology, reflection journal</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Learning</span><span class="desc">Academy courses, certifications, skill-building circles</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Barakah</span><span class="desc">Amanah Points, Sadaqah &amp; Waqf, SisTech circles, mentor matching</span></div>
+      </div>
+      <p class="intro" style="color:var(--gold)"><em class="serif">SisTech is the alliance she could never find — community is the moat.</em></p>
+    </div>
+  </div>
+  <div class="foot"><span>03 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 4 MARKET -->
+<section class="slide s-navy">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Market Opportunity</div>
+    <h2 class="h md serif">A large addressable market. <em>Built from the UAE.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <div class="stats s3">
+        <div class="stat"><div class="k">TAM</div><div class="n">$5T+</div><div class="l">global Islamic financial-services assets; ecosystem tailwind, not Afiyah revenue TAM</div></div>
+        <div class="stat div"><div class="k">SAM</div><div class="n">UAE + GCC</div><div class="l">initial beachhead: digitally active women, employers and institutions</div></div>
+        <div class="stat div"><div class="k">SOM · Year 1</div><div class="n">Bottom-up</div><div class="l">SOM derived from reachable users, conversion, pricing and partner contracts</div></div>
+      </div>
+      <div class="rev">
+        <div class="c"><div class="v serif">$88.6K</div><div class="bar" style="height:3%"></div><div class="y">Y1</div></div>
+        <div class="c"><div class="v serif">$1.04M</div><div class="bar" style="height:8%"></div><div class="y">Y2</div></div>
+        <div class="c"><div class="v serif">$4.41M</div><div class="bar" style="height:20%"></div><div class="y">Y3</div></div>
+        <div class="c"><div class="v serif">$17.3M</div><div class="bar" style="height:46%"></div><div class="y">Y4</div></div>
+        <div class="c"><div class="v serif">$73.9M</div><div class="bar" style="height:100%"></div><div class="y">Y5</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>04 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 5 BUSINESS MODEL -->
+<section class="slide s-plum">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Business Model</div>
+    <h2 class="h md serif">Four focused engines. <em>One ecosystem.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <table class="tbl">
+        <thead><tr><th>Revenue stream</th><th>Year 1</th><th>Year 5</th></tr></thead>
+        <tbody>
+          <tr><td>B2C memberships</td><td>$69.8K</td><td>$47.1M</td></tr>
+          <tr><td>Courses & certifications</td><td>$12.8K</td><td>$18.1M</td></tr>
+          <tr><td>B2B platform licensing</td><td>—</td><td>$2.16M</td></tr>
+          <tr><td>Employer / institutional programmes</td><td>—</td><td>$2.75M</td></tr>
+          <tr><td>Consent-based impact analytics</td><td>—</td><td>$900K</td></tr>
+          <tr><td>Marketplace enablement</td><td>—</td><td>$720K</td></tr>
+          <tr><td>Licensed-partner referrals</td><td>—</td><td>$1.62M</td></tr>
+          <tr><td>Partner campaigns</td><td>$6K</td><td>$480K</td></tr>
+          <tr class="tot"><td>Total Revenue</td><td>$88.6K</td><td><span class="pos">$73.9M</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>05 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 6 UNIT ECONOMICS -->
+<section class="slide s-teal">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Unit Economics</div>
+    <h2 class="h md serif">Disciplined assumptions. <em>Prove before scaling.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <div class="stats s4">
+        <div class="stat"><div class="k">CAC</div><div class="n sm">$40</div><div class="l">target blended CAC</div></div>
+        <div class="stat div"><div class="k">LTV</div><div class="n sm">TBD</div><div class="l">validated after cohort data</div></div>
+        <div class="stat div"><div class="k">LTV : CAC</div><div class="n sm">Target</div><div class="l">LTV:CAC &gt;3× after evidence</div></div>
+        <div class="stat div"><div class="k">Payback</div><div class="n sm"><12 mo</div><div class="l">Benchmark &lt;12 mo</div></div>
+      </div>
+      <table class="tbl" style="max-width:780px">
+        <thead><tr><th>Cohort</th><th>CAC</th><th>Conv</th><th>ARPU/yr</th><th>LTV</th></tr></thead>
+        <tbody>
+          <tr><td>Health</td><td>$35</td><td>20%</td><td>$492</td><td>$1,624</td></tr>
+          <tr><td>Wealth</td><td>$50</td><td>16%</td><td>$550</td><td>$2,200</td></tr>
+          <tr><td>Deen</td><td>$45</td><td>18%</td><td>$510</td><td>$1,785</td></tr>
+          <tr><td>Learning &amp; Skills</td><td>$40</td><td>17%</td><td>$480</td><td>$1,440</td></tr>
+          <tr class="em"><td>Blended</td><td>$40</td><td>18%</td><td>$492</td><td>TBD</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="foot"><span>06 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 7 P&L -->
+<section class="slide s-emerald">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Five-Year P&amp;L</div>
+    <h2 class="h md serif">Scenario-led growth. <em>Governed by milestones.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Y1</th><th>Y2</th><th>Y3</th><th>Y4</th><th>Y5</th></tr></thead>
+        <tbody>
+          <tr><td>Total Revenue</td><td>$88.6K</td><td>$1.04M</td><td>$4.41M</td><td>$17.3M</td><td><span class="pos">$73.9M</span></td></tr>
+          <tr><td>Gross Profit</td><td>$63K</td><td>$875K</td><td>$3.89M</td><td>$15.7M</td><td>$68.3M</td></tr>
+          <tr><td>Gross Margin</td><td>71%</td><td>84%</td><td>88%</td><td>91%</td><td>92.5%</td></tr>
+          <tr class="em"><td>EBITDA</td><td class="neg">($44.6K)</td><td class="pos">$214.9K</td><td class="pos">$2.26M</td><td class="pos">$11.6M</td><td class="pos">$56.6M</td></tr>
+          <tr><td>EBITDA Margin</td><td class="neg">(50.3%)</td><td>20.6%</td><td>51.3%</td><td>67.1%</td><td>76.7%</td></tr>
+          <tr><td>Paying Users</td><td>400</td><td>3,200</td><td>12,000</td><td>44,000</td><td>180,000</td></tr>
+        </tbody>
+      </table>
+      <div class="mini m3">
+        <div class="mcard fill"><div class="mh serif">Rule of 40 · Y5</div><div class="mt"><b>76.7%</b> — elite, passes 40% by Y3</div></div>
+        <div class="mcard fill"><div class="mh serif">Magic Number · Y3</div><div class="mt"><b>3.6&#215;</b> — benchmark &gt;1.5&#215;</div></div>
+        <div class="mcard fill"><div class="mh serif">Burn Multiple · Y1</div><div class="mt"><b>0.64&#215;</b> — capital efficient</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>07 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 8 GROWTH -->
+<section class="slide s-navy">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Growth &amp; Retention</div>
+    <h2 class="h md serif">Conservative base. <em>Meaningful upside.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Y1</th><th>Y2</th><th>Y3</th><th>Y4</th><th>Y5</th></tr></thead>
+        <tbody>
+          <tr><td>Community Users</td><td>8K</td><td>40K</td><td>120K</td><td>400K</td><td>1.5M</td></tr>
+          <tr><td>Paying Users</td><td>400</td><td>3.2K</td><td>12K</td><td>44K</td><td>180K</td></tr>
+          <tr><td>Annual Churn</td><td>30%</td><td>20%</td><td>17%</td><td>10%</td><td>5%</td></tr>
+          <tr><td>Net Revenue Retention</td><td>95%</td><td>98%</td><td>99%</td><td>99.7%</td><td>99.9%</td></tr>
+        </tbody>
+      </table>
+      <div class="mini m3">
+        <div class="mcard"><div class="mh serif">Bear</div><div class="mt">750K users · 56K paying · <b>$9.5M ARR</b></div></div>
+        <div class="mcard fill"><div class="mh serif">Base</div><div class="mt">1.5M users · 180K paying · <b>$47M ARR</b></div></div>
+        <div class="mcard"><div class="mh serif">Bull</div><div class="mt">2.0M users · 280K paying · <b>$146M ARR</b></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>08 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 9 GOVERNANCE -->
+<section class="slide s-teal">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Governance &amp; Compliance</div>
+    <h2 class="h md serif">Faith-led. <em>Investor-ready.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <p class="intro dim">A technology, education and wellbeing platform. Financial products, payments, KYC and regulated advice are not provided by Afiyah; any future regulated service is delivered only through appropriately licensed partners. Current integrations are prototype-stage unless explicitly stated otherwise.</p>
+      <div class="mini m3">
+        <div class="mcard"><div class="mh serif">Shariah Advisory Board</div><div class="mt">Product principles, content boundaries, review of sensitive features</div></div>
+        <div class="mcard"><div class="mh serif">ADL Advisory Oversight</div><div class="mt">Strategic governance, risk oversight, institutional readiness</div></div>
+        <div class="mcard"><div class="mh serif">DIFC-Aligned Standards</div><div class="mt">Privacy, security, auditability, women-safe experience</div></div>
+      </div>
+      <div class="bound">
+        <div><span class="xx">&#10005;</span>No deposits accepted</div>
+        <div><span class="xx">&#10005;</span>No fund custody</div>
+        <div><span class="xx">&#10005;</span>No payment processing</div>
+        <div><span class="xx">&#10005;</span>No financial advisory</div>
+        <div><span class="xx">&#10005;</span>No investment advisory</div>
+        <div><span class="xx">&#10005;</span>No Shariah certification</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>09 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 10 VALUATION -->
+<section class="slide s-plum">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Funding Logic</div>
+    <h2 class="h md serif">Value creation through <em>evidence, not hype.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <table class="tbl">
+        <thead><tr><th>Year</th><th>Subscription ARR</th><th>Total Revenue</th><th>Illustrative Milestone</th></tr></thead>
+        <tbody>
+          <tr><td>2026 · close</td><td>$69.8K</td><td>$88.6K</td><td>MVP + launch readiness</td></tr>
+          <tr><td>2027</td><td>$620.9K</td><td>$1.04M</td><td>repeatable acquisition + B2B pilots</td></tr>
+          <tr><td>2028</td><td>$2.58M</td><td>$4.41M</td><td>multi-market product-market fit</td></tr>
+          <tr><td>2029</td><td>$10.45M</td><td>$17.3M</td><td>scaled recurring revenue</td></tr>
+          <tr class="em"><td>2030 · exit</td><td>$47.1M</td><td>$73.9M</td><td><span class="pos">strategic optionality</span></td></tr>
+        </tbody>
+      </table>
+      <div class="mini m2">
+        <div class="mcard fill"><div class="mh serif">Strategic optionality</div><div class="mt">Potential long-term paths include strategic investment, acquisition or continued private growth; no exit outcome is assumed.</div></div>
+        <div class="mcard"><div class="mh serif">Long-term independence</div><div class="mt">A durable institution may remain private; any future listing would depend on scale, governance and market conditions.</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>10 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 11 EDGE -->
+<section class="slide s-emerald">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">Competitive Edge</div>
+    <h2 class="h md serif">Alliance, <em>not adaptation.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <div class="flist">
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Three-domain platform</span><span class="desc">wealth + health + deen + learning + Barakah in one</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">SisTech movement</span><span class="desc">community is the moat — network effects compound</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Education, not advisory</span><span class="desc">outside the regulatory perimeter, faster iteration</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">Partner-led</span><span class="desc">banks, employers, NGOs, educators and wellness partners distribute — asset-light</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">AI-native</span><span class="desc">RAG, citation-first, Shariah-reviewed and traceable</span></div>
+        <div class="row"><span class="dia">&#10022;</span><span class="term">UAE-first expansion</span><span class="desc">UAE beachhead, then GCC and selected MENA corridors; South Asia as a later scale market</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>11 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 12 THE ASK -->
+<section class="slide s-navy">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye">The Ask</div>
+    <h2 class="h md serif">$250K–$500K. <em>12–18 months to inflection.</em></h2>
+    <div class="star">&#10022;</div>
+    <div class="body">
+      <div class="fbar">
+        <span style="width:50%;background:var(--gold)">50%</span>
+        <span style="width:15%;background:#9C7C44;color:#f3ecdd">15%</span>
+        <span style="width:12%;background:var(--gold-lt)">12%</span>
+        <span style="width:13%;background:#C99BA6;color:#3a1320">13%</span>
+        <span style="width:10%;background:#8a9a8f;color:#0e2740">10%</span>
+      </div>
+      <table class="tbl" style="max-width:780px">
+        <tbody>
+          <tr class="em"><td>Platform Development</td><td>50%</td><td>$187.5K</td></tr>
+          <tr><td>DIFC Ops &amp; Compliance</td><td>15%</td><td>$56.3K</td></tr>
+          <tr><td>AI &amp; Infrastructure</td><td>12%</td><td>$45K</td></tr>
+          <tr><td>BD &amp; Marketing</td><td>13%</td><td>$48.8K</td></tr>
+          <tr><td>Buffer &amp; Contingency</td><td>10%</td><td>$37.5K</td></tr>
+        </tbody>
+      </table>
+      <div class="mini m3">
+        <div class="mcard fill"><div class="mh serif">$375K</div><div class="mt">target raise · mid-point</div></div>
+        <div class="mcard"><div class="mh serif">Milestone-based</div><div class="mt">valuation discussion</div></div>
+        <div class="mcard"><div class="mh serif">UAE angels · impact funds</div><div class="mt">priority investor profiles</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>12 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">SWIPE &#8594;</span></div>
+</section>
+
+<!-- 13 VISION -->
+<section class="slide s-maroon">
+  <div class="frame"></div><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+  <div class="inner" style="justify-content:center;text-align:center;align-items:center">
+    <div class="lock"><span class="name serif">Afiyah<span class="inf">&#8734;</span></span><span class="tag">Infinity AI</span></div>
+    <div class="eye" style="margin-top:22px">By 2030</div>
+    <div class="qmark serif" style="margin-top:16px">&#8220;</div>
+    <p class="bigq serif">Islam made her whole. The world fragmented her. Afiyah puts her back together.
+      <span class="by">Maisha Tabassum Beg &middot; Founder &amp; CEO</span></p>
+    <p class="intro dim" style="margin-top:24px;max-width:58ch">women across UAE, GCC and wider MENA &middot; every woman's inclusion reaching 5–7 dependents &middot; returns that compound through education, ethical commerce and Barakah — not extraction.</p>
+    <span class="cover pill" style="display:inline-block;margin-top:24px;border:1px solid var(--gold);color:var(--gold);font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;padding:7px 18px">Women-first &middot; Faith-aligned &middot; UAE-built &middot; Partner-enabled</span>
+  </div>
+  <div class="foot"><span>13 / 13</span><span class="url">afiyahinfinity.com</span><span class="nx">&#10022;</span></div>
+</section>
+
+</div><!-- /scaler -->
+</div><!-- /stage -->
+
+<div class="navbar">
+  <span class="hint">&#8592; &#8594; keys</span>
+  <button id="prev">&#8592;</button>
+  <span class="count"><b id="cur">1</b> / <span id="tot">13</span></span>
+  <button id="next">&#8594;</button>
+</div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let i=0;const tot=slides.length;
+document.getElementById('tot').textContent=tot;
+function go(n){
+  i=Math.max(0,Math.min(tot-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('show',k===i));
+  document.getElementById('cur').textContent=i+1;
+  document.getElementById('prev').disabled=i===0;
+  document.getElementById('next').disabled=i===tot-1;
+}
+document.getElementById('prev').onclick=()=>go(i-1);
+document.getElementById('next').onclick=()=>go(i+1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')go(i+1);
+  if(e.key==='ArrowLeft')go(i-1);
+});
+/* SCALE the fixed 1280x800 canvas to fit the viewport — keeps every slide pixel-perfect, no reflow/bleed */
+function fit(){
+  const s=document.getElementById('scaler');
+  const pad=48; // breathing room
+  const sx=(window.innerWidth-pad)/1280;
+  const sy=(window.innerHeight-pad-70)/800; // leave room for navbar
+  const k=Math.min(sx,sy);
+  s.style.transform='scale('+k+')';
+}
+window.addEventListener('resize',fit);
+fit();go(0);
+</script>
+</body>
+</html>
